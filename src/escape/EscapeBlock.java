@@ -22,11 +22,8 @@ public class EscapeBlock extends Block{
         this.x = x;
         this.y = y;
         neighbours = new ArrayList<>();
-        //System.out.println(x);
-        //System.out.println(y);
         
         if(x>0) {
-            grid.getBlock(0,0);
             grid.getBlock(x-1, y).connect(this);
             if(grid.getBlock(x-1, y).alive())
                 neighbours.add(grid.getBlock(x-1, y));
