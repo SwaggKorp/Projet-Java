@@ -1,72 +1,61 @@
-
+/*
+Grid Class :
+handles the creation of blocks, resizes the grid and provides a structure for the blocks
+*/
 package escape;
 
 import java.util.ArrayList;
 
 public class Grid extends javax.swing.JPanel {
 
-    protected ArrayList<ArrayList<Block>> grid;                          
-    public static final int margin = 10;
-    public static final int length = 23;
-    protected int gridWidth = 10;
-    protected int gridHeight = 10;
+    protected ArrayList<ArrayList<EscapeBlock>> grid;                          
+    public static final int margin = 10;                                        // margin between the border of the Panel to the blocks
+    public static final int length = 23;                                        // the size of a block
+    protected int gridWidth = 0;       
+    protected int gridHeight = 0;
     
     public Grid() {
-        super();
-        grid = new ArrayList<>();
+        super();                                                                // create a new JPanel
+        grid = new ArrayList<>();                                               // initialize a list containing the blocks
         
         this.setLayout(null);                                                   // format the component            
-        addComponentListener(new java.awt.event.ComponentAdapter() {
+        addComponentListener(new java.awt.event.ComponentAdapter() {            // detects when the window is resized to resize the grid
             @Override
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 resize();
             }
         });
-        
-        // create blocks
-        for (int i = 0; i < gridWidth; i++) {
-            grid.add(new ArrayList<Block>());
-            for (int j = 0; j < gridHeight; j++) {
-                Block block = new Block(length);
-                block.setLocation(margin + i * (length+1) ,margin + j * (length+1));
-                block.connect(this);
-                
-                this.add(block);
-                grid.get(i).add(block);
-            }
-        }
-        
-        // fit the grid to the window
-        resize();
     }
     // add a row of blocks to the grid
     private void addRow() {
-        ArrayList<Block> row = new ArrayList<>();
+        ArrayList<EscapeBlock> row = new ArrayList<>();
+        grid.add(row);
         
         for (int j = 0; j < gridWidth; j++) {
-            Block block = new Block(length);
-            block.setLocation(margin + j * (length+1) ,margin + gridHeight * (length+1));
+            
+            EscapeBlock block = new EscapeBlock(length,this, j, gridHeight);
+            block.setLocation(margin + j * (length+1) ,
+                    margin + gridHeight * (length+1));  
                 
-            this.add(block);
-            row.add(block);
+            this.add(block);                                                    // add to the JPanel   
+            row.add(block);                                                     // and to the row
         }
         
         gridHeight++;
-        grid.add(row);
     }
     // remove a row from the grid
     private void removeRow() {
         gridHeight--;       
-        for (Block block : grid.get(gridHeight)) {            // for each block from the last row
-            this.remove(block);                               // remove it from the UI
+        for (EscapeBlock block : grid.get(gridHeight)) {                        // for each block from the last row
+            this.remove(block);                                                 // remove it from the UI
         }
 
-        grid.remove(gridHeight);                              // remove the row
+        grid.remove(gridHeight);                                                // remove the row
     }
     // add a column of blocks to the grid
     private void addColumn() {
         for (int j = 0; j < gridHeight; j++) {
-            Block block = new Block(length);
+            EscapeBlock block = new EscapeBlock(length,this,gridWidth,j);
             block.setLocation(margin + gridWidth * (length+1) ,
                     margin + j * (length+1));       
             this.add(block);
@@ -77,25 +66,15 @@ public class Grid extends javax.swing.JPanel {
     // remove a column from the grid
     private void removeColumn() {
         gridWidth--;
-        for (ArrayList<Block> row : grid) {                 // for each row
-            this.remove(row.get(gridWidth));                // remove the last block from the UI
-            row.remove(gridWidth);                          // remove the last block from the grid
+        for (ArrayList<EscapeBlock> row : grid) {                               // for each row
+            this.remove(row.get(gridWidth));                                    // remove the last block from the UI
+            row.remove(gridWidth);                                              // remove the last block from the grid
         }
         
     }
+    // resize the grid : adds and removes blocks
     public void resize() {
-        int newW = (getWidth()-2*margin)/(length+1);
-        int newH = (getHeight()-2*margin)/(length+1);
-
-        for(int i=gridWidth;i<newW;i++)
-            addColumn();
-        for(int i=gridWidth;i>newW;i--)
-            removeColumn();
-        for(int i=gridHeight;i<newH;i++)
-            addRow();
-        for(int i=gridHeight;i>newH;i--)
-            removeRow();
-        repaint();
+        resize(getWidth(),getHeight());
     }
     public void resize(int width, int height) {
         int newW = (width-2*margin)/(length+1);
@@ -111,13 +90,15 @@ public class Grid extends javax.swing.JPanel {
             removeRow();
         repaint();
     }
-    public int getGridWidth() {
+    
+    // getters
+    public int getGridWidth() {  
         return gridWidth;
     }
     public int getGridHeight() {
         return gridHeight;
     }
-    public Block getBlock(int x, int y) {
+    public EscapeBlock getBlock(int x, int y) {
         return grid.get(y).get(x);
     }
 }
