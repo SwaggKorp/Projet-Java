@@ -41,6 +41,7 @@ public class Escape extends javax.swing.JFrame {
         openMenu = new javax.swing.JMenuItem();
         saveMenu = new javax.swing.JMenuItem();
         saveasMenu = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,6 +82,14 @@ public class Escape extends javax.swing.JFrame {
             }
         });
         jMenu5.add(saveasMenu);
+
+        jMenuItem1.setText("test");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem1);
 
         jMenuBar3.add(jMenu5);
 
@@ -135,6 +144,14 @@ public class Escape extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_openMenuActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        PathFinder finder = new PathFinder(grid1);
+        System.out.println(grid1.getGridHeight());
+        finder.shortedPath(0, 0, grid1.getGridWidth()-1, grid1.getGridHeight()-1);
+        grid1.repaint();
+        System.out.println(grid1.getGridWidth());
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -159,6 +176,7 @@ public class Escape extends javax.swing.JFrame {
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar3;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem newMenu;
     private javax.swing.JMenuItem openMenu;
     private javax.swing.JMenuItem saveMenu;
