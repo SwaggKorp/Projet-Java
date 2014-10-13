@@ -7,9 +7,9 @@ package escape;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author arnaud
+/*
+EscapeGrid class :
+provides high level methods helping is loading/saving the grid
  */
 public class EscapeGrid extends Grid {
     public EscapeGrid() {
@@ -32,10 +32,16 @@ public class EscapeGrid extends Grid {
         }
     }
     public void clear() {
-        for(ArrayList<Block> row : grid) {
-            for(Block block : row)
+        for(ArrayList<EscapeBlock> row : grid) {
+            for(EscapeBlock block : row)
                 block.setAlive(true);
         }
         repaint();
+    }
+    public void clearMarks() {
+        for(ArrayList<EscapeBlock> row : grid) {
+            for(EscapeBlock block : row)
+                block.setMarked(false);
+        }
     }
 }
