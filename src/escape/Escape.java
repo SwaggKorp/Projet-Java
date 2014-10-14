@@ -146,10 +146,8 @@ public class Escape extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         PathFinder finder = new PathFinder(grid1);
-        System.out.println(grid1.getGridHeight());
         finder.shortedPath(0, 0, grid1.getGridWidth()-1, grid1.getGridHeight()-1);
         grid1.repaint();
-        System.out.println(grid1.getGridWidth());
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
