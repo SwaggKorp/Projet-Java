@@ -15,6 +15,7 @@ public class EscapeBlock extends Block{
     private int x;
     private int y;
     private Grid grid;
+    private ArrayList<Character> characters;
     
     public EscapeBlock(int length, Grid grid, int x, int y) {
         super(length);
@@ -33,8 +34,11 @@ public class EscapeBlock extends Block{
             if(grid.getBlock(x, y-1).alive())
                 neighbours.add(grid.getBlock(x, y-1));
         }
+        
+        characters = new ArrayList<>();
     }
     
+    // #################   PATH FINDING   ###################
     // make sure all the surrounding blocks are connected if alive, and disconnected if not
     public void reconnect() {
         if(alive) {
@@ -78,6 +82,29 @@ public class EscapeBlock extends Block{
     // improve equals efficiency
     public boolean equals(EscapeBlock block) {
         return (block.getPosition()[0]==x && block.getPosition()[1]==y);
+    }
+    public void disconnectAll() {
+        for(EscapeBlock block : neighbours)
+            block.disconnect(this);
+    }
+    // #################   CHARACTER   ###################
+    @Override
+    public void addCharacter(Character character) {
+        characters.add(character);
+        super.addCharacter(character);
+    }
+    public void removeCharacter(Character character) {
+        characters.remove(character);
+        if(characters.isEmpty())
+            hasCharacter= false;
+    }
+    public boolean hasCharacter() {
+        return hasCharacter;
+    }
+    public boolean hasEnemy() {
+        if(characters.size()==0)
+            return characters.get(0).isEnemy();
+        return false;
     }
     // getters and setters
     public boolean isMarked() {
