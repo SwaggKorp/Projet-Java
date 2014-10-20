@@ -29,6 +29,7 @@ public class EscapeGrid extends Grid {
         for(int i=0;i<gridWidth; i++) {
             for(int j=0;j<gridHeight;j++) {
                 grid.get(j).get(i).setAlive(states[i][j]);
+                grid.get(j).get(i).reconnectAll();
                 grid.get(j).get(i).setAliveColor(new Color(137,220,115));
             }
         }
@@ -44,8 +45,10 @@ public class EscapeGrid extends Grid {
     }
     public void clearMarks() {
         for(ArrayList<EscapeBlock> row : grid) {
-            for(EscapeBlock block : row)
+            for(EscapeBlock block : row) {
                 block.setMarked(false);
+                block.setAliveColor(new Color(137,220,115));
+            }
         }
     }
 }

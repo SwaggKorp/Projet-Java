@@ -74,7 +74,8 @@ public class EscapeBlock extends Block{
     }
     // add and remove connection with other blocks
     public void connect(EscapeBlock block) {
-        neighbours.add(block);
+        if(!neighbours.contains(block))
+            neighbours.add(block);
     }
     public void disconnect(EscapeBlock block){
         neighbours.remove(block);
@@ -86,6 +87,10 @@ public class EscapeBlock extends Block{
     public void disconnectAll() {
         for(EscapeBlock block : neighbours)
             block.disconnect(this);
+    }
+    public void reconnectAll() {
+        for(int i=0; i<neighbours.size(); i++)
+            neighbours.get(i).reconnect();
     }
     // #################   CHARACTER   ###################
     @Override

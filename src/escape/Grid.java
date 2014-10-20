@@ -47,6 +47,7 @@ public class Grid extends javax.swing.JPanel {
     private void removeRow() {
         gridHeight--;       
         for (EscapeBlock block : grid.get(gridHeight)) {                        // for each block from the last row
+            block.disconnectAll();
             this.remove(block);                                                 // remove it from the UI
         }
 
@@ -68,6 +69,8 @@ public class Grid extends javax.swing.JPanel {
         gridWidth--;
         for (ArrayList<EscapeBlock> row : grid) {                               // for each row
             this.remove(row.get(gridWidth));                                    // remove the last block from the UI
+            for(EscapeBlock block : row)
+                block.disconnectAll();
             row.remove(gridWidth);                                              // remove the last block from the grid
         }
         
