@@ -9,12 +9,14 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 
-public class Block extends JComponent {
+public abstract class Block extends JComponent {
     private int length;
     protected boolean alive = true;
     protected Color aliveColor;
     private Color deadColor;
-    
+    protected Color characterColor;
+    protected boolean hasCharacter;
+    protected int charMargin;
     
     public Block(int length) {
         super();
@@ -48,6 +50,7 @@ public class Block extends JComponent {
             g.setColor(deadColor);
        
         g.fillRect(0, 0, length, length);
+        g.fillOval(charMargin, charMargin, length-charMargin, length-charMargin);
     }
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -60,4 +63,9 @@ public class Block extends JComponent {
         alive = !alive;
         repaint();
     }
-}
+    protected void addCharacter(Character character) {
+        charMargin = character.getMargin();
+        characterColor = character.getColor();
+        hasCharacter = true;
+    }
+ }
