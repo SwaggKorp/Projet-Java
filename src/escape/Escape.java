@@ -1,17 +1,12 @@
 // modified with smartGit !!
 package escape;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/**
- *
- * @author arnaud
- */
 public class Escape extends javax.swing.JFrame {
     FileManager fileManager;
     // Creates new form Escape
