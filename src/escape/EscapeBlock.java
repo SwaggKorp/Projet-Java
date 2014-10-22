@@ -15,7 +15,7 @@ public class EscapeBlock extends Block{
     private int x;
     private int y;
     private Grid grid;
-    private ArrayList<Character> characters;
+    private Character character;
     
     public EscapeBlock(int length, Grid grid, int x, int y) {
         super(length);
@@ -34,8 +34,6 @@ public class EscapeBlock extends Block{
             if(grid.getBlock(x, y-1).alive())
                 neighbours.add(grid.getBlock(x, y-1));
         }
-        
-        characters = new ArrayList<>();
     }
     
     // #################   PATH FINDING   ###################
@@ -92,25 +90,25 @@ public class EscapeBlock extends Block{
         for(int i=0; i<neighbours.size(); i++)
             neighbours.get(i).reconnect();
     }
+    
     // #################   CHARACTER   ###################
     @Override
     public void addCharacter(Character character) {
-        characters.add(character);
+        this.character = character;
         super.addCharacter(character);
     }
-    public void removeCharacter(Character character) {
-        characters.remove(character);
-        if(characters.isEmpty())
-            hasCharacter= false;
+    public void removeCharacter() {
+        character = null;
+        hasCharacter = false;
+        repaint();
     }
     public boolean hasCharacter() {
         return hasCharacter;
     }
     public boolean hasEnemy() {
-        if(characters.size()==0)
-            return characters.get(0).isEnemy();
-        return false;
+        return character.isEnemy();
     }
+    
     // getters and setters
     public boolean isMarked() {
         return marked;

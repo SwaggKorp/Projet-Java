@@ -1,14 +1,21 @@
-// modified with smartGit !!
+
 package escape;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.Timer;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Escape extends javax.swing.JFrame {
-    FileManager fileManager;
+    private FileManager fileManager;
+    private Player player;
+    private Timer arrowsManager;
+    private int arrowKeyCode;
+    
     // Creates new form Escape
     public Escape() {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -21,6 +28,11 @@ public class Escape extends javax.swing.JFrame {
         jFileChooser1.addChoosableFileFilter(filter);
         jFileChooser1.setFileFilter(filter);
         fileManager = new FileManager(this, grid1);
+        arrowsManager = new Timer(90, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                 player.keyPressed(arrowKeyCode);
+            }
+        });
     }
 
     // auto-generated UI settings
@@ -37,8 +49,18 @@ public class Escape extends javax.swing.JFrame {
         saveMenu = new javax.swing.JMenuItem();
         saveasMenu = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        PlayerMenu = new javax.swing.JMenu();
+        spawn = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
+            }
+        });
 
         jMenu5.setText("File");
 
@@ -78,6 +100,7 @@ public class Escape extends javax.swing.JFrame {
         });
         jMenu5.add(saveasMenu);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.META_MASK));
         jMenuItem1.setText("test");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,6 +110,19 @@ public class Escape extends javax.swing.JFrame {
         jMenu5.add(jMenuItem1);
 
         jMenuBar3.add(jMenu5);
+
+        PlayerMenu.setText("Player");
+
+        spawn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.META_MASK));
+        spawn.setText("Spawn");
+        spawn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spawnActionPerformed(evt);
+            }
+        });
+        PlayerMenu.add(spawn);
+
+        jMenuBar3.add(PlayerMenu);
 
         setJMenuBar(jMenuBar3);
 
@@ -141,9 +177,32 @@ public class Escape extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         PathFinder finder = new PathFinder(grid1);
-        finder.shortedPath(0, 0, grid1.getGridWidth()-1, grid1.getGridHeight()-1);
+        finder.shortedPath(player.getBlock().getPosition()[0], player.getBlock().getPosition()[1], grid1.getGridWidth()-1, grid1.getGridHeight()-1);
         grid1.repaint();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+        if(evt.getKeyCode()==arrowKeyCode)
+            arrowsManager.stop();  
+    }//GEN-LAST:event_formKeyReleased
+
+    private void spawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spawnActionPerformed
+        player = new Player(grid1.getBlock(0, 0),grid1);
+    }//GEN-LAST:event_spawnActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if(player!=null) {
+            if(evt.getKeyCode()!=arrowKeyCode) {
+                player.keyPressed(evt.getKeyCode());
+                arrowKeyCode = evt.getKeyCode();
+                arrowsManager.start();
+            } else if(!arrowsManager.isRunning()) {
+                player.keyPressed(evt.getKeyCode());
+                arrowKeyCode = evt.getKeyCode();
+                arrowsManager.start();
+            } 
+        }
+    }//GEN-LAST:event_formKeyPressed
 
     /**
      * @param args the command line arguments
@@ -165,6 +224,7 @@ public class Escape extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu PlayerMenu;
     private escape.EscapeGrid grid1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu5;
@@ -174,5 +234,6 @@ public class Escape extends javax.swing.JFrame {
     private javax.swing.JMenuItem openMenu;
     private javax.swing.JMenuItem saveMenu;
     private javax.swing.JMenuItem saveasMenu;
+    private javax.swing.JMenuItem spawn;
     // End of variables declaration//GEN-END:variables
 }

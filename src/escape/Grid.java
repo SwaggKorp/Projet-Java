@@ -18,7 +18,8 @@ public class Grid extends javax.swing.JPanel {
         super();                                                                // create a new JPanel
         grid = new ArrayList<>();                                               // initialize a list containing the blocks
         
-        this.setLayout(null);                                                   // format the component            
+        this.setLayout(null);// format the component
+        this.setFocusable(false);
         addComponentListener(new java.awt.event.ComponentAdapter() {            // detects when the window is resized to resize the grid
             @Override
             public void componentResized(java.awt.event.ComponentEvent evt) {

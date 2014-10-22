@@ -23,6 +23,7 @@ public abstract class Block extends JComponent {
         
         this.length = length;
         this.setSize(length, length);
+        this.setFocusable(false);
         
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -50,7 +51,12 @@ public abstract class Block extends JComponent {
             g.setColor(deadColor);
        
         g.fillRect(0, 0, length, length);
-        g.fillOval(charMargin, charMargin, length-charMargin, length-charMargin);
+        
+        if(hasCharacter) {
+            g.setColor(characterColor); 
+            g.fillOval(charMargin, charMargin, length-2*charMargin, length-2*charMargin);
+        }
+       
     }
     public void setAlive(boolean alive) {
         this.alive = alive;
@@ -67,5 +73,6 @@ public abstract class Block extends JComponent {
         charMargin = character.getMargin();
         characterColor = character.getColor();
         hasCharacter = true;
+        repaint();
     }
  }
