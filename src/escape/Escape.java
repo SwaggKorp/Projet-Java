@@ -14,7 +14,11 @@ public class Escape extends javax.swing.JFrame {
     private FileManager fileManager;
     private Player player;
     private Timer arrowsManager;
+    private Timer enemyManager;
     private int arrowKeyCode;
+    private Enemy enemy;
+    private Enemy enemy1;
+    PathFinder finder;
     
     // Creates new form Escape
     public Escape() {
@@ -33,6 +37,14 @@ public class Escape extends javax.swing.JFrame {
                  player.keyPressed(arrowKeyCode);
             }
         });
+        enemyManager = new Timer(200, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                 enemy.move();
+                 enemy1.move();
+            }
+        });
+        
+        finder = new PathFinder(grid1);
     }
 
     // auto-generated UI settings
@@ -176,7 +188,6 @@ public class Escape extends javax.swing.JFrame {
     }//GEN-LAST:event_openMenuActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        PathFinder finder = new PathFinder(grid1);
         finder.shortedPath(player.getBlock().getPosition()[0], player.getBlock().getPosition()[1], grid1.getGridWidth()-1, grid1.getGridHeight()-1);
         grid1.repaint();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -188,6 +199,9 @@ public class Escape extends javax.swing.JFrame {
 
     private void spawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spawnActionPerformed
         player = new Player(grid1.getBlock(0, 0),grid1);
+        enemy = new Enemy(grid1.getBlock(grid1.getGridWidth()-1, grid1.getGridHeight()-1),grid1,player,finder);
+        enemy1 = new Enemy(grid1.getBlock(0, grid1.getGridHeight()-1),grid1,player,finder);
+        enemyManager.start();
     }//GEN-LAST:event_spawnActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
@@ -203,7 +217,6 @@ public class Escape extends javax.swing.JFrame {
             } 
         }
     }//GEN-LAST:event_formKeyPressed
-
     /**
      * @param args the command line arguments
      */

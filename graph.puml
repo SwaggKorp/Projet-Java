@@ -1,0 +1,76 @@
+@startuml
+abstract class escape.Block
+abstract class escape.Character
+annotation java.lang.Override
+annotation java.lang.SuppressWarnings
+class escape.Escape
+class escape.EscapeBlock
+class escape.EscapeGrid
+class escape.FileManager
+class escape.Grid
+class escape.PathFinder
+class escape.Player
+class java.awt.Color
+class java.awt.Graphics
+class java.awt.event.ActionEvent
+class java.awt.event.ActionListener
+class java.awt.event.KeyEvent
+class java.io.BufferedReader
+class java.io.BufferedWriter
+class java.io.FileNotFoundException
+class java.io.FileReader
+class java.io.FileWriter
+class java.io.IOException
+class java.io.PrintWriter
+class java.util.ArrayList
+class java.util.logging.Level
+class java.util.logging.Logger
+class javax.swing.JComponent
+class javax.swing.JFileChooser
+class javax.swing.JFrame
+class javax.swing.JPanel
+class javax.swing.Timer
+class javax.swing.UnsupportedLookAndFeelException
+class javax.swing.filechooser.FileNameExtensionFilter
+escape.Block ..> java.lang.Override
+escape.Block ..> java.awt.Color
+escape.Block ..> java.awt.Graphics
+escape.Block ..> java.util.ArrayList
+escape.Block --|> javax.swing.JComponent
+escape.Character ..> java.awt.Color
+escape.Character ..> java.awt.event.KeyEvent
+escape.Escape ..> java.lang.SuppressWarnings
+escape.Escape ..> java.awt.event.ActionEvent
+escape.Escape ..> java.awt.event.ActionListener
+escape.Escape ..> java.util.logging.Level
+escape.Escape ..> java.util.logging.Logger
+escape.Escape ..> javax.swing.JFileChooser
+escape.Escape --|> javax.swing.JFrame
+escape.Escape ..> javax.swing.Timer
+escape.Escape ..> javax.swing.UnsupportedLookAndFeelException
+escape.Escape ..> javax.swing.filechooser.FileNameExtensionFilter
+escape.EscapeBlock --|> escape.Block
+escape.EscapeBlock ..> java.lang.Override
+escape.EscapeBlock ..> java.awt.Color
+escape.EscapeBlock ..> java.util.ArrayList
+escape.EscapeGrid --|> escape.Grid
+escape.EscapeGrid ..> java.awt.Color
+escape.EscapeGrid ..> java.util.ArrayList
+escape.FileManager ..> java.io.BufferedReader
+escape.FileManager ..> java.io.BufferedWriter
+escape.FileManager ..> java.io.FileNotFoundException
+escape.FileManager ..> java.io.FileReader
+escape.FileManager ..> java.io.FileWriter
+escape.FileManager ..> java.io.IOException
+escape.FileManager ..> java.io.PrintWriter
+escape.FileManager ..> java.util.logging.Level
+escape.FileManager ..> java.util.logging.Logger
+escape.Grid ..> java.lang.Override
+escape.Grid ..> java.util.ArrayList
+escape.Grid --|> javax.swing.JPanel
+escape.PathFinder ..> java.awt.Color
+escape.PathFinder ..> java.util.ArrayList
+escape.Player --|> escape.Character
+escape.Player ..> java.awt.Color
+escape.Player ..> java.awt.event.KeyEvent
+@enduml

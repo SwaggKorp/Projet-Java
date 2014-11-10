@@ -18,8 +18,9 @@ public class PathFinder {
     public PathFinder(EscapeGrid grid) {
         this.grid = grid;
     }
-    public void shorterPath(EscapeBlock root, EscapeBlock target) {
+    public ArrayList<EscapeBlock> shorterPath(EscapeBlock root, EscapeBlock target) {
         ArrayList<EscapeBlock> waitingBlocks = new ArrayList<>();
+        ArrayList<EscapeBlock> path = new ArrayList<>();
         EscapeBlock current;
         grid.clearMarks();
         
@@ -34,13 +35,14 @@ public class PathFinder {
                     block.setMarked(true);
                     block.setFather(current);
                     if(block.equals(target)) {
-                        paintItBlue(root, target); // TEST
-                        return;
+                        path = getPath(root, target);
+                        return path;
                     }
                     waitingBlocks.add(block);
                 }
             }
         }
+        return new ArrayList<>();
     }
     public void shorterPath(int[] rootLocation, int[] targetLocation) {
         shortedPath(rootLocation[0],rootLocation[1],targetLocation[0],targetLocation[1]);
@@ -55,5 +57,14 @@ public class PathFinder {
             current = current.getFather();
         }
         root.setAliveColor(new Color(56,177,239));
+    }
+    public ArrayList<EscapeBlock> getPath(EscapeBlock root, EscapeBlock target) {
+        ArrayList<EscapeBlock> path = new ArrayList<>();
+        EscapeBlock current = target;
+        while(!current.equals(root)) {
+            current = current.getFather();
+            path.add(current);
+        }
+        return path;
     }
 }
