@@ -19,9 +19,9 @@ public abstract class Character {
     protected EscapeBlock block;
     protected EscapeGrid grid;
     
-    public Character(EscapeBlock source, EscapeGrid grid, Color color) {
+    public Character(EscapeBlock source, Escape window, Color color) {
         block = source;
-        this.grid = grid;
+        this.grid = window.getGrid();
         this.color = color;
         source.addCharacter(this);
     }

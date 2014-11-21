@@ -13,8 +13,8 @@ import java.awt.event.KeyEvent;
  * @author arnaud
  */
 public class Player extends Character {
-    public Player(EscapeBlock block, EscapeGrid grid) {
-        super(block, grid, new Color(44,128,143));
+    public Player(EscapeBlock block, Escape window) {
+        super(block, window, new Color(44,128,143));
     }
     public void keyPressed(int keyCode) {
         switch(keyCode) {

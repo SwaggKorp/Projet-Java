@@ -16,11 +16,14 @@ public class Enemy extends Character {
     private Player player;
     private PathFinder finder;
     private ArrayList<EscapeBlock> path;
+    private Escape window;
     
-    public Enemy(EscapeBlock block, EscapeGrid grid, Player player, PathFinder finder) {
-        super(block, grid, new Color(164,12,12));
-        this.player = player;
-        this.finder = finder;
+    public Enemy(EscapeBlock block, Escape window) {
+        super(block, window, new Color(164,12,12));
+        
+        this.window = window;
+        this.player = window.getPlayer();
+        this.finder = window.getPathFinder();
         
         path = new ArrayList<>();
     }
@@ -31,6 +34,9 @@ public class Enemy extends Character {
             path = finder.shorterPath(player.getBlock(), this.getBlock());
         }
         else {
+            if(path.get(0).hasCharacter() && !path.get(0).hasEnemy()) {
+                window.displayGameOver();
+            }
             this.moveTo(path.get(0));
             path.remove(0);
         }

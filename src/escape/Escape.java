@@ -18,7 +18,7 @@ public class Escape extends javax.swing.JFrame {
     private int arrowKeyCode;
     private Enemy enemy;
     private Enemy enemy1;
-    PathFinder finder;
+    private PathFinder finder;
     
     // Creates new form Escape
     public Escape() {
@@ -45,6 +45,8 @@ public class Escape extends javax.swing.JFrame {
         });
         
         finder = new PathFinder(grid1);
+        gameOverMenu1.setVisible(false);
+        gameOverMenu1.setWindow(this);
     }
 
     // auto-generated UI settings
@@ -54,6 +56,7 @@ public class Escape extends javax.swing.JFrame {
 
         jFileChooser1 = new javax.swing.JFileChooser();
         grid1 = new escape.EscapeGrid();
+        gameOverMenu1 = new escape.GameOverMenu();
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         newMenu = new javax.swing.JMenuItem();
@@ -73,6 +76,9 @@ public class Escape extends javax.swing.JFrame {
                 formKeyReleased(evt);
             }
         });
+
+        grid1.add(gameOverMenu1);
+        gameOverMenu1.setBounds(60, 20, 397, 300);
 
         jMenu5.setText("File");
 
@@ -198,9 +204,9 @@ public class Escape extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyReleased
 
     private void spawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spawnActionPerformed
-        player = new Player(grid1.getBlock(0, 0),grid1);
-        enemy = new Enemy(grid1.getBlock(grid1.getGridWidth()-1, grid1.getGridHeight()-1),grid1,player,finder);
-        enemy1 = new Enemy(grid1.getBlock(0, grid1.getGridHeight()-1),grid1,player,finder);
+        player = new Player(grid1.getBlock(0, 0),this);
+        enemy = new Enemy(grid1.getBlock(grid1.getGridWidth()-1, grid1.getGridHeight()-1),this);
+        enemy1 = new Enemy(grid1.getBlock(0, grid1.getGridHeight()-1),this);
         enemyManager.start();
     }//GEN-LAST:event_spawnActionPerformed
 
@@ -235,9 +241,34 @@ public class Escape extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    public Player getPlayer() {
+        return player;
+    }
+    public EscapeGrid getGrid() {
+        return grid1;
+    }
+    public PathFinder getPathFinder() {
+        return finder;
+    }
+    public void resetGame() {
+        player.getBlock().removeCharacter();
+        enemy.getBlock().removeCharacter();
+        enemy1.getBlock().removeCharacter();
+        gameOverMenu1.setVisible(false);
+        player = new Player(grid1.getBlock(0, 0),this);
+        enemy = new Enemy(grid1.getBlock(grid1.getGridWidth()-1, grid1.getGridHeight()-1),this);
+        enemy1 = new Enemy(grid1.getBlock(0, grid1.getGridHeight()-1),this);
+        enemyManager.start();
+    }
+    public void displayGameOver() {
+        enemyManager.stop();
+        gameOverMenu1.setVisible(true);
+        System.out.println("hey");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu PlayerMenu;
+    private escape.GameOverMenu gameOverMenu1;
     private escape.EscapeGrid grid1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu5;
