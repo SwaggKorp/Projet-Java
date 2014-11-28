@@ -4,16 +4,18 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 
 public class MainActivity extends Activity {
 
-    RelativeLayout layout;
+    RelativeLayout joystickLayout;
+    GridLayout gameGridLayout;
     TextView textViewX, textViewY, textViewDirection;
+
 
 
     @Override
@@ -21,27 +23,32 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        layout = (RelativeLayout) findViewById(R.id.layout_joystick);
+        joystickLayout = (RelativeLayout) findViewById(R.id.layout_joystick);
+        gameGridLayout = (GridLayout) findViewById(R.id.layout_grid);
+
         textViewX = (TextView) findViewById(R.id.textViewX);
         textViewY = (TextView) findViewById(R.id.textViewY);
         textViewDirection = (TextView) findViewById(R.id.textViewDirection);
 
-        final Joystick test = new Joystick(getApplicationContext(),layout,R.drawable.image_button);
-        test.setMinDistance(80);
-        test.setOffset(50);
-        test.setLayoutAlpha(150);
-        test.setStickAlpha(100);
-        test.setStickSize(100,100);
-        test.setLayoutSize(350,350);
+        final Joystick joystick = new Joystick(getApplicationContext(),joystickLayout,R.drawable.image_button);
+        joystick.setMinDistance(80);
+        joystick.setOffset(50);
+        joystick.setLayoutAlpha(150);
+        joystick.setStickAlpha(100);
+        joystick.setStickSize(100,100);
+        joystick.setLayoutSize(250,250);
 
-        layout.setOnTouchListener(new View.OnTouchListener() {
+
+        GameGrid gamegrid = new GameGrid(getApplicationContext(),gameGridLayout,0,15,984);
+
+        joystickLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                test.drawStick(event);
+                joystick.drawStick(event);
                 String direction = "";
 
                 if(event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN){
-                    int directionNum = test.getDirection();
+                    int directionNum = joystick.getDirection();
                     if(directionNum == 0)
                         direction = "";
                     else if(directionNum == 1)
