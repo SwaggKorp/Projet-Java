@@ -77,4 +77,13 @@ public class GameGrid {
         });
 
     }
+
+    public void resetGrid(){
+        for(int i = 0; i<columns; i++){
+            for(int j = 0; j<rows; j++){
+                if(blocks.get(i).get(j).getState() == Block.STATE_WALL)
+                    blocks.get(i).get(j).setState(Block.STATE_FIELD);
+            }
+        }
+    }
 }

@@ -1,10 +1,14 @@
 package com.henryturp.joystickapp;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,15 +17,18 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     RelativeLayout joystickLayout;
+    RelativeLayout menuLayout;
     GridLayout gameGridLayout;
     TextView textViewX, textViewY, textViewDirection;
-
+    ImageView menu_button;
+    Button resetButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findViewById(R.id.main_layout).setBackgroundColor(Color.rgb(15, 15, 15));
 
         joystickLayout = (RelativeLayout) findViewById(R.id.layout_joystick);
         gameGridLayout = (GridLayout) findViewById(R.id.layout_grid);
@@ -29,17 +36,20 @@ public class MainActivity extends Activity {
         textViewX = (TextView) findViewById(R.id.textViewX);
         textViewY = (TextView) findViewById(R.id.textViewY);
         textViewDirection = (TextView) findViewById(R.id.textViewDirection);
+        menuLayout = (RelativeLayout) findViewById(R.id.menuLayout);
+        menu_button = (ImageView) findViewById(R.id.menu_icon);
+        resetButton = (Button) findViewById(R.id.resetButton);
 
         final Joystick joystick = new Joystick(getApplicationContext(),joystickLayout,R.drawable.image_button);
         joystick.setMinDistance(80);
         joystick.setOffset(50);
-        joystick.setLayoutAlpha(150);
-        joystick.setStickAlpha(100);
+        joystick.setLayoutAlpha(200);
+        joystick.setStickAlpha(150);
         joystick.setStickSize(100,100);
         joystick.setLayoutSize(250,250);
 
 
-        GameGrid gamegrid = new GameGrid(getApplicationContext(),gameGridLayout,0,15,984);
+        final GameGrid gameGrid = new GameGrid(getApplicationContext(),gameGridLayout,0,15,984);
 
         joystickLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -64,6 +74,25 @@ public class MainActivity extends Activity {
                 textViewY.setText("Y: " + event.getY());
                 textViewDirection.setText("Direction: " + direction);
                 return true;
+            }
+        });
+
+        menu_button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (menuLayout.getVisibility() == View.VISIBLE)
+                        menuLayout.setVisibility(View.INVISIBLE);
+                    else menuLayout.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gameGrid.resetGrid();
             }
         });
     }

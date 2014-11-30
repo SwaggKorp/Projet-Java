@@ -23,17 +23,20 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_above="@+id/textViewY"
+        android:textColor="#ffffff"
         android:text="X: " />
 
     <TextView android:id="@+id/textViewY"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:textColor="#ffffff"
         android:layout_above="@+id/textViewDirection"
         android:text="Y: "/>
 
     <TextView android:id="@+id/textViewDirection"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:textColor="#ffffff"
         android:layout_above="@+id/layout_joystick"
         android:text="Direction: " />
 
@@ -55,5 +58,30 @@
     </RelativeLayout>
 
 
+    <ImageView
+        android:id="@+id/menu_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:clickable="true"
+        android:background="@drawable/icon_42544_smaller_inverted"/>
+
+    <RelativeLayout
+        android:id="@+id/menuLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerInParent="true" >
+
+        <Button
+            android:id="@+id/resetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@android:drawable/btn_default"
+            android:text="Reset!"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

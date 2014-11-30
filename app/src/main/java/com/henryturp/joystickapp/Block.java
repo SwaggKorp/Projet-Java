@@ -18,7 +18,10 @@ public class Block extends View {
     private int wallColour = Color.rgb(136,102,57);
     private int side;
 
-    private int blockState = 0;
+    public static final int STATE_FIELD = 0;
+    public static final int STATE_WALL = 1;
+
+    private int blockState = STATE_FIELD;
 
     public Block(Context context, int side){
         super(context);
@@ -52,6 +55,7 @@ public class Block extends View {
 
     public void setState(int state){
         blockState = state;
+        invalidate();
     }
     public int getState(){
         return blockState;
