@@ -30,7 +30,7 @@ public class GameGrid {
         blocks = new ArrayList<ArrayList<Block>>();
 
         int blockSize = width / columns;
-        rows = columns;                     // Square Grid for the moment.
+        rows = columns;                     // Square Grid for the moment. Beware of Filemanager(square grid)
 
         mLayout.setColumnCount(columns);
         mLayout.setRowCount(rows);
@@ -85,5 +85,9 @@ public class GameGrid {
                     blocks.get(i).get(j).setState(Block.STATE_FIELD);
             }
         }
+    }
+
+    public ArrayList<ArrayList<Block>> getBlocks(){
+        return blocks;
     }
 }

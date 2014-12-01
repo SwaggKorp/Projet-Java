@@ -2,17 +2,15 @@ package com.henryturp.joystickapp;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-
 
 public class MainActivity extends Activity {
 
@@ -21,7 +19,8 @@ public class MainActivity extends Activity {
     GridLayout gameGridLayout;
     TextView textViewX, textViewY, textViewDirection;
     ImageView menu_button;
-    Button resetButton;
+    Button resetButton, saveButton, openButton, deleteButton;
+    EditText saveEditText;
 
 
     @Override
@@ -38,7 +37,13 @@ public class MainActivity extends Activity {
         textViewDirection = (TextView) findViewById(R.id.textViewDirection);
         menuLayout = (RelativeLayout) findViewById(R.id.menuLayout);
         menu_button = (ImageView) findViewById(R.id.menu_icon);
+
         resetButton = (Button) findViewById(R.id.resetButton);
+        saveButton = (Button) findViewById(R.id.saveButton);
+        openButton = (Button) findViewById(R.id.openButton);
+        deleteButton = (Button) findViewById(R.id.deleteButton);
+
+        saveEditText = (EditText) findViewById(R.id.saveEditText);
 
         final Joystick joystick = new Joystick(getApplicationContext(),joystickLayout,R.drawable.image_button);
         joystick.setMinDistance(80);
@@ -50,6 +55,7 @@ public class MainActivity extends Activity {
 
 
         final GameGrid gameGrid = new GameGrid(getApplicationContext(),gameGridLayout,0,15,984);
+        final FileManager fileManager= new FileManager(gameGrid.getBlocks(),getApplicationContext());
 
         joystickLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -57,13 +63,13 @@ public class MainActivity extends Activity {
                 joystick.drawStick(event);
                 String direction = "";
 
-                if(event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN) {
                     int directionNum = joystick.getDirection();
-                    if(directionNum == 0)
+                    if (directionNum == 0)
                         direction = "";
-                    else if(directionNum == 1)
+                    else if (directionNum == 1)
                         direction = "Right!";
-                    else if(directionNum == 2)
+                    else if (directionNum == 2)
                         direction = "Down!";
                     else if (directionNum == 3)
                         direction = "Left!";
@@ -93,6 +99,27 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 gameGrid.resetGrid();
+            }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileManager.saveFile(saveEditText.getText().toString());
+            }
+        });
+
+        openButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileManager.readFile(saveEditText.getText().toString());
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileManager.deleteFile(saveEditText.getText().toString());
             }
         });
     }
