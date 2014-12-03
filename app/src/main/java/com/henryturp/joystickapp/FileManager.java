@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Henry on 30/11/2014.
+ * Class for dealing with/saving and reopening created mazes.
  */
 public class FileManager {
     private ArrayList<ArrayList<Block>> blocks;

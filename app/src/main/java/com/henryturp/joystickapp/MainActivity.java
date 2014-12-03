@@ -20,9 +20,6 @@ import java.util.List;
 
 public class MainActivity extends Activity {
 
-    /* File Manager bugs like hell. To do with setupGrid? Review gameGrid resizing techniques above all. After fix file manager
-    * Spinner response also seems dodgy at times.*/
-
     RelativeLayout joystickLayout;
     RelativeLayout menuLayout;
     GridLayout gameGridLayout;
@@ -37,6 +34,7 @@ public class MainActivity extends Activity {
     Joystick joystick;
 
     public final static int gridColumnNumber = 20; // FIXED GRID SIZE. We chose 20, feels accurate enough.
+    public final static int gridRowNumber = 25;
     public final static String FIELD_COLOUR = "#ff905358";
     public final static String WALL_COLOUR = "#ff372a3b";
     public final static String BACKGROUND_COLOUR = "#ff372a3b";
@@ -73,10 +71,10 @@ public class MainActivity extends Activity {
         joystick.setStickSize(100,100);
         joystick.setLayoutSize(250,250);
 
-        // Max columns = 30 looks good
+        gameGrid = new GameGrid(getApplicationContext(),gameGridLayout,gridRowNumber,gridColumnNumber,984,1295);   // Creates game Grid
+        fileManager= new FileManager(gameGrid.getBlocks(),getApplicationContext());                  // Create joystick
 
-        gameGrid = new GameGrid(getApplicationContext(),gameGridLayout,gridColumnNumber,984,1295);
-        fileManager= new FileManager(gameGrid.getBlocks(),getApplicationContext());
+        final Player player = new Player(gameGrid.getBlocks().get(10).get(10),getApplicationContext(),gameGrid.getBlocks(),R.drawable.star_shape);
 
         addItemsToSpinner(fileManager.getFileNames());
 
@@ -86,20 +84,9 @@ public class MainActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 joystick.drawStick(event);
-                String direction = "";
 
                 if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN) {
-                    int directionNum = joystick.getDirection();
-                    if (directionNum == 0)
-                        direction = "";
-                    else if (directionNum == 1)
-                        direction = "Right!";
-                    else if (directionNum == 2)
-                        direction = "Down!";
-                    else if (directionNum == 3)
-                        direction = "Left!";
-                    else if (directionNum == 4)
-                        direction = "Up!";
+                   player.move(joystick.getDirection());
                 }
                 return true;
             }

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Henry on 28/11/2014.
+ * Deals with organizing the blocks.
+ * Also deals with various listeners so that the user can edit the maze.
  */
 public class GameGrid {
     private Context mContext;
@@ -24,13 +26,15 @@ public class GameGrid {
     private boolean touchDown = false;
     private Block lastBlock;
 
-    public GameGrid(Context context, GridLayout layout, int col, int width, int height){
+    public GameGrid(Context context, GridLayout layout,int row, int col, int width, int height){
         mContext = context;
         mLayout = layout;
 
         mHeight = height;
         mWidth = width;
 
+        rows = row;
+        columns = col;
         setupGrid(col);
 
         mLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -67,10 +71,7 @@ public class GameGrid {
     }
 
     public void setupGrid(int col){    // MUST BE MADE PRIVATE when FileManager is recoded.
-        columns = col;
-
         blockSize = mWidth / columns;
-        rows = (mHeight / blockSize);
 
         blocks = new ArrayList<ArrayList<Block>>();
 
@@ -80,7 +81,7 @@ public class GameGrid {
         for(int i = 0; i<rows; i++){                           // Adds the blocks.
             ArrayList<Block> blockRow = new ArrayList<Block>();
             for(int j = 0; j<columns; j++){
-                Block temp = new Block(mContext, blockSize);
+                Block temp = new Block(mContext, blockSize,i,j);
                 blockRow.add(temp);
                 mLayout.addView(temp);
             }

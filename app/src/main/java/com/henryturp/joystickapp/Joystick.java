@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by Henry on 27/11/2014.
+ * Class that deals with the joystick.
  */
 public class Joystick {
     private int xPos = 0, yPos = 0, minDistance = 0;
