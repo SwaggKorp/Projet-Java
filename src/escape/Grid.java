@@ -13,6 +13,7 @@ public class Grid extends javax.swing.JPanel {
     public static final int length = 23;                                        // the size of a block
     protected int gridWidth = 0;       
     protected int gridHeight = 0;
+    private boolean editable = true;
     
     public Grid() {
         super();                                                                // create a new JPanel
@@ -104,6 +105,12 @@ public class Grid extends javax.swing.JPanel {
     }
     public EscapeBlock getBlock(int x, int y) {
         return grid.get(y).get(x);
+    }
+    public boolean isEditable() {
+        return editable;
+    }
+    public void setEditable(boolean editable) {
+       this.editable = editable; 
     }
 }
 

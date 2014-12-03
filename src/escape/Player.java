@@ -15,15 +15,34 @@ import java.awt.event.KeyEvent;
 public class Player extends Character {
     public Player(EscapeBlock block, Escape window) {
         super(block, window, new Color(44,128,143));
+        this.enemy = false;
     }
-    public void keyPressed(int keyCode) {
-        switch(keyCode) {
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_DOWN:
-                move(keyCode);
+    public void move(Direction direction) {
+        int x = block.getPosition()[0];
+        int y = block.getPosition()[1];
+        switch(direction) {
+            case left:
+                if(x>0 && grid.getBlock(x-1, y).alive())
+                    moveTo(grid.getBlock(x-1, y));
+                break;
+            case right:
+                if(x<grid.getGridWidth()-1 && grid.getBlock(x+1, y).alive())
+                    moveTo(grid.getBlock(x+1, y));
+                break;
+            case up:
+                if(y>0 && grid.getBlock(x, y-1).alive())
+                    moveTo(grid.getBlock(x, y-1));
+                break;
+            case down:
+                if(y<grid.getGridHeight()-1 && grid.getBlock(x, y+1).alive())
+                    moveTo(grid.getBlock(x, y+1));
+                break;
         }
+        
+        if(block.hasCharacter() && block.hasEnemy())
+            window.displayGameOver();
     }
-    
+    public void destroy() {
+        block.removeCharacter();
+    }
 }

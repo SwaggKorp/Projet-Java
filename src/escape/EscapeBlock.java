@@ -17,7 +17,7 @@ public class EscapeBlock extends Block{
     private Grid grid;
     private Character character;
     
-    public EscapeBlock(int length, Grid grid, int x, int y) {
+    public EscapeBlock(int length,Grid grid, int x, int y) {
         super(length);
         this.grid = grid;
         this.x = x;
@@ -62,8 +62,10 @@ public class EscapeBlock extends Block{
     // methods changing alive have to reconnect the block
     @Override
     protected void onClick() {
-        super.onClick();
-        reconnect();
+        if(grid.isEditable()) {
+            super.onClick();
+            reconnect();
+        }
     }
     @Override
     public void setAlive(boolean alive) {

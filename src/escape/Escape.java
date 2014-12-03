@@ -3,6 +3,7 @@ package escape;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -11,40 +12,55 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Escape extends javax.swing.JFrame {
+    
     private FileManager fileManager;
-    private Player player;
-    private Timer arrowsManager;
-    private Timer enemyManager;
-    private int arrowKeyCode;
-    private Enemy enemy;
-    private Enemy enemy1;
     private PathFinder finder;
+    
+    private Player player;
+    private CopyOnWriteArrayList<Enemy> enemies;
+    
+    private Timer arrowsManager;
+    private Direction currentDirection;
+    private Timer enemyManager;
+    private Timer spawnManager;
     
     // Creates new form Escape
     public Escape() {
+        // use OS X menu bar 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Escape");
-        
+        //initialize all components
         initComponents();
         this.setTitle("Escape - New file");
-        
+        // initialize open/save 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Escape file","ecp");
         jFileChooser1.addChoosableFileFilter(filter);
         jFileChooser1.setFileFilter(filter);
         fileManager = new FileManager(this, grid1);
+        // create a tool that computes shorter path
+        finder = new PathFinder(grid1);
+        
+        enemies = new CopyOnWriteArrayList<>();
+        
         arrowsManager = new Timer(90, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                 player.keyPressed(arrowKeyCode);
+                 player.move(currentDirection);
+            }
+        });
+        final Escape window = this;
+        spawnManager = new Timer(1000, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                 enemies.add(Enemy.spawn(window));
             }
         });
         enemyManager = new Timer(200, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                 enemy.move();
-                 enemy1.move();
+                 for(Enemy enemy : enemies) {
+                     enemy.move();
+                 }
             }
         });
         
-        finder = new PathFinder(grid1);
         gameOverMenu1.setVisible(false);
         gameOverMenu1.setWindow(this);
     }
@@ -63,7 +79,6 @@ public class Escape extends javax.swing.JFrame {
         openMenu = new javax.swing.JMenuItem();
         saveMenu = new javax.swing.JMenuItem();
         saveasMenu = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         PlayerMenu = new javax.swing.JMenu();
         spawn = new javax.swing.JMenuItem();
 
@@ -117,15 +132,6 @@ public class Escape extends javax.swing.JFrame {
             }
         });
         jMenu5.add(saveasMenu);
-
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.META_MASK));
-        jMenuItem1.setText("test");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu5.add(jMenuItem1);
 
         jMenuBar3.add(jMenu5);
 
@@ -193,32 +199,21 @@ public class Escape extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_openMenuActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        finder.shortedPath(player.getBlock().getPosition()[0], player.getBlock().getPosition()[1], grid1.getGridWidth()-1, grid1.getGridHeight()-1);
-        grid1.repaint();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-        if(evt.getKeyCode()==arrowKeyCode)
+        if(Direction.fromKeyCode(evt.getKeyCode())==currentDirection)
             arrowsManager.stop();  
     }//GEN-LAST:event_formKeyReleased
 
     private void spawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spawnActionPerformed
-        player = new Player(grid1.getBlock(0, 0),this);
-        enemy = new Enemy(grid1.getBlock(grid1.getGridWidth()-1, grid1.getGridHeight()-1),this);
-        enemy1 = new Enemy(grid1.getBlock(0, grid1.getGridHeight()-1),this);
-        enemyManager.start();
+        resetGame();
     }//GEN-LAST:event_spawnActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         if(player!=null) {
-            if(evt.getKeyCode()!=arrowKeyCode) {
-                player.keyPressed(evt.getKeyCode());
-                arrowKeyCode = evt.getKeyCode();
-                arrowsManager.start();
-            } else if(!arrowsManager.isRunning()) {
-                player.keyPressed(evt.getKeyCode());
-                arrowKeyCode = evt.getKeyCode();
+            currentDirection = Direction.fromKeyCode(evt.getKeyCode());
+            if(currentDirection != Direction.none) {
+                currentDirection = Direction.fromKeyCode(evt.getKeyCode());
+                player.move(currentDirection);
                 arrowsManager.start();
             } 
         }
@@ -252,19 +247,28 @@ public class Escape extends javax.swing.JFrame {
         return finder;
     }
     public void resetGame() {
-        player.getBlock().removeCharacter();
-        enemy.getBlock().removeCharacter();
-        enemy1.getBlock().removeCharacter();
         gameOverMenu1.setVisible(false);
+        grid1.setEditable(false);
+        
+        for(Enemy enemy : enemies) {
+            enemy.destroy();
+        }
+        
         player = new Player(grid1.getBlock(0, 0),this);
-        enemy = new Enemy(grid1.getBlock(grid1.getGridWidth()-1, grid1.getGridHeight()-1),this);
-        enemy1 = new Enemy(grid1.getBlock(0, grid1.getGridHeight()-1),this);
+        enemies.add(Enemy.spawn(this));
         enemyManager.start();
+        spawnManager.start();
     }
     public void displayGameOver() {
         enemyManager.stop();
+        spawnManager.stop();
         gameOverMenu1.setVisible(true);
-        System.out.println("hey");
+        
+        player.destroy();
+        player = null;
+    }
+    public void removeEnemy(Enemy enemy) {
+        enemies.remove(enemy);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu PlayerMenu;
@@ -273,7 +277,6 @@ public class Escape extends javax.swing.JFrame {
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar3;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem newMenu;
     private javax.swing.JMenuItem openMenu;
     private javax.swing.JMenuItem saveMenu;

@@ -18,11 +18,14 @@ public abstract class Character {
     protected boolean enemy;
     protected EscapeBlock block;
     protected EscapeGrid grid;
+    protected Escape window;
     
     public Character(EscapeBlock source, Escape window, Color color) {
         block = source;
         this.grid = window.getGrid();
         this.color = color;
+        this.window = window;
+        
         source.addCharacter(this);
     }
     protected void move(int keyCode) {
