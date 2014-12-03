@@ -14,9 +14,10 @@ public class Block extends View {
 
     private Context mContext;
     private Paint paint;
-    private int backgroundColour = Color.rgb(137,220,115);
-    private int wallColour = Color.rgb(136,102,57);
+    private int backgroundColour = Color.parseColor(MainActivity.FIELD_COLOUR);
+    private int wallColour = Color.parseColor(MainActivity.WALL_COLOUR);
     private int side;
+    private ViewGroup.LayoutParams params;
 
     public static final int STATE_FIELD = 0;
     public static final int STATE_WALL = 1;
@@ -30,7 +31,8 @@ public class Block extends View {
         mContext = context;
         this.side = side;
 
-        setLayoutParams(new ViewGroup.LayoutParams(side,side));
+        params = new ViewGroup.LayoutParams(side,side);
+        setLayoutParams(params);
 
 //        setOnTouchListener(new OnTouchListener() {
 //            @Override
@@ -60,4 +62,5 @@ public class Block extends View {
     public int getState(){
         return blockState;
     }
+
 }

@@ -22,7 +22,6 @@ public class FileManager {
         this.blocks = blocks;
 
         File[] files = mContext.getFilesDir().listFiles();  // Gets already saved files.
-        int len = files.length;
         for(File file : files){
             fileNames.add(file.getName());
         }
@@ -46,7 +45,7 @@ public class FileManager {
         else Toast.makeText(mContext, "File name already used!", Toast.LENGTH_SHORT).show();
     }
 
-    public void readFile(String fileTitle){
+    public boolean readFile(String fileTitle){         //return true if success.
         String fileName = fileTitle + ".maze";
         if(fileNames.contains(fileName)) {
             int size = 0;
@@ -64,33 +63,40 @@ public class FileManager {
                     fiStream.close();
                 }
                 getGridFromData(data);
+                return true;
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(mContext, "Reading failed", Toast.LENGTH_SHORT).show();
+                return false;
             }
         }
         else Toast.makeText(mContext, "File doesn't exist!", Toast.LENGTH_SHORT).show();
+        return false;
     }
 
-    public void deleteFile(String fileTitle){
+    public boolean deleteFile(String fileTitle){          // return true if success.
         String fileName = fileTitle + ".maze";
         if(fileNames.contains(fileName)){
             mContext.deleteFile(fileName);
             fileNames.remove(fileName);
             Toast.makeText(mContext, "File deleted.", Toast.LENGTH_SHORT).show();
+            return true;
         }
         Toast.makeText(mContext, "File doesn't exist!", Toast.LENGTH_SHORT).show();
+        return false;
     }
 
-    private byte[] gridData(){   //Convert grid to byte[] for saving.
-        int size = blocks.size();
-        int len = size*(size + 1);
+    public byte[] gridData(){
+
+        int numColumns = blocks.get(0).size();
+        int numRows = blocks.size();
+        int len = numRows*(numColumns + 1);
         byte[] data = new byte[len];
         int q = 0;
-        int NEXT_LINE = 3;
+        int NEXT_LINE = 2;
 
-        for(int i = 0; i<size; i++){
-            for(int j = 0; j<size; j++){
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
                 data[q] = (byte) blocks.get(i).get(j).getState();
                 q++;
             }
@@ -112,7 +118,7 @@ public class FileManager {
             } else if (current == 1) {
                 blocks.get(i).get(j).setState(Block.STATE_WALL);
                 j++;
-            } else if (current == 3) {
+            } else if (current == 2) {
                 i++;
                 j = 0;
             }
@@ -120,6 +126,11 @@ public class FileManager {
     }
 
     public ArrayList<String> getFileNames(){
-        return fileNames;
+        ArrayList<String> list = new ArrayList<String>();
+        for(int i = 0; i<fileNames.size();i++){
+            String temp = fileNames.get(i);
+            list.add(temp.substring(0, temp.length() - 5));
+        }
+        return list;
     }
 }

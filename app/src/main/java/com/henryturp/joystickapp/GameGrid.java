@@ -17,33 +17,21 @@ public class GameGrid {
     private ArrayList<ArrayList<Block>> blocks;
 
     private int columns, rows;
+    private int mWidth, mHeight;
+
+    private int blockSize;
 
     private boolean touchDown = false;
     private Block lastBlock;
 
-    public GameGrid(Context context, GridLayout layout, int row, int col, int width){
+    public GameGrid(Context context, GridLayout layout, int col, int width, int height){
         mContext = context;
         mLayout = layout;
-        columns = col;
-        rows = row;
 
-        blocks = new ArrayList<ArrayList<Block>>();
+        mHeight = height;
+        mWidth = width;
 
-        int blockSize = width / columns;
-        rows = columns;                     // Square Grid for the moment. Beware of Filemanager(square grid)
-
-        mLayout.setColumnCount(columns);
-        mLayout.setRowCount(rows);
-
-        for(int i = 0; i<columns; i++){                           // Adds the blocks.
-            ArrayList<Block> blockRow = new ArrayList<Block>();
-            for(int j = 0; j<rows; j++){
-                Block temp = new Block(mContext, blockSize);
-                blockRow.add(temp);
-                mLayout.addView(temp);
-            }
-            blocks.add(blockRow);
-        }
+        setupGrid(col);
 
         mLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -78,9 +66,31 @@ public class GameGrid {
 
     }
 
+    public void setupGrid(int col){    // MUST BE MADE PRIVATE when FileManager is recoded.
+        columns = col;
+
+        blockSize = mWidth / columns;
+        rows = (mHeight / blockSize);
+
+        blocks = new ArrayList<ArrayList<Block>>();
+
+        mLayout.setColumnCount(columns);
+        mLayout.setRowCount(rows);
+
+        for(int i = 0; i<rows; i++){                           // Adds the blocks.
+            ArrayList<Block> blockRow = new ArrayList<Block>();
+            for(int j = 0; j<columns; j++){
+                Block temp = new Block(mContext, blockSize);
+                blockRow.add(temp);
+                mLayout.addView(temp);
+            }
+            blocks.add(blockRow);
+        }
+    }
+
     public void resetGrid(){
-        for(int i = 0; i<columns; i++){
-            for(int j = 0; j<rows; j++){
+        for(int i = 0; i<rows; i++){
+            for(int j = 0; j<columns; j++){
                 if(blocks.get(i).get(j).getState() == Block.STATE_WALL)
                     blocks.get(i).get(j).setState(Block.STATE_FIELD);
             }
