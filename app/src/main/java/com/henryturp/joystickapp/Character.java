@@ -23,7 +23,7 @@ public abstract class Character {
 
     public abstract Bitmap getSkin();
 
-    public void move(int keycode){
+    public void move(int keycode){    // Can't be arsed with ifs
         switch(keycode){
             case 1:
                 moveRight();
@@ -36,6 +36,8 @@ public abstract class Character {
                 break;
             case 4:
                 moveUp();
+                break;
+            default:
                 break;
         }
     }

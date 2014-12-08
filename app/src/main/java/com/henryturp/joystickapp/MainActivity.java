@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
@@ -33,11 +36,16 @@ public class MainActivity extends Activity {
     FileManager fileManager;
     Joystick joystick;
 
+    Timer playerTimer;
+    TimerTask playerTimerTask;
+    int playerDirection = 0;
+
     public final static int gridColumnNumber = 20; // FIXED GRID SIZE. We chose 20, feels accurate enough.
     public final static int gridRowNumber = 25;
     public final static String FIELD_COLOUR = "#ff905358";
     public final static String WALL_COLOUR = "#ff372a3b";
     public final static String BACKGROUND_COLOUR = "#ff372a3b";
+    public final static int playDelay = 110;
 
 
     boolean firstOpen = true;    //To handle OnItemSelectedListener problem.. Awful, but works :/
@@ -64,17 +72,33 @@ public class MainActivity extends Activity {
         saveEditText = (EditText) findViewById(R.id.saveEditText);
 
         joystick = new Joystick(getApplicationContext(),joystickLayout,R.drawable.image_button);
-        joystick.setMinDistance(80);
+        joystick.setMinDistance(20);
         joystick.setOffset(50);
         joystick.setLayoutAlpha(255);
         joystick.setStickAlpha(255);
         joystick.setStickSize(100,100);
-        joystick.setLayoutSize(250,250);
+        joystick.setLayoutSize(270,270);
 
         gameGrid = new GameGrid(getApplicationContext(),gameGridLayout,gridRowNumber,gridColumnNumber,984,1295);   // Creates game Grid
         fileManager= new FileManager(gameGrid.getBlocks(),getApplicationContext());                  // Create joystick
 
         final Player player = new Player(gameGrid.getBlocks().get(10).get(10),getApplicationContext(),gameGrid.getBlocks(),R.drawable.star_shape);
+
+        playerTimerTask = new TimerTask(){
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {  // Timer can't access views that aren't from its own thread!!
+                    @Override
+                    public void run(){
+                        player.move(playerDirection);
+                    }
+                });
+            }
+        };
+        playerTimer = new Timer();
+        playerTimer.scheduleAtFixedRate(playerTimerTask, 0, playDelay);
+
+
 
         addItemsToSpinner(fileManager.getFileNames());
 
@@ -84,10 +108,26 @@ public class MainActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 joystick.drawStick(event);
+                playerDirection = joystick.getDirection();
 
-                if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN) {
-                   player.move(joystick.getDirection());
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if(joystick.getDirection() != playerDirection) { //If direction has changed
+                        playerDirection = joystick.getDirection();
+                        playerTimer.cancel();
+                        playerTimer = new Timer();
+                    }
                 }
+
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    playerTimer.cancel();
+                    playerDirection = 0;    // Player stops moving
+                }
+
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    playerDirection = joystick.getDirection();
+                    playerTimer = new Timer();
+                }
+
                 return true;
             }
         });
