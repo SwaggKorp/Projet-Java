@@ -11,8 +11,10 @@ import javax.swing.JComponent;
 public abstract class Block extends JComponent {
     private int length;
     protected boolean alive = true;
-    protected final static Color aliveColor = new Color(137,220,115);
-    protected final static Color deadColor = new Color(136,102,57);
+    
+    public final static Color aliveColor = new Color(255,206,87);
+    public final static Color deadColor = new Color(57,57,57);
+    
     protected Color characterColor;
     protected boolean hasCharacter;
     protected int charMargin;

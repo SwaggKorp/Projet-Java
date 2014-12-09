@@ -1,12 +1,13 @@
 
 package escape;
 
-import java.awt.Color;
+import com.apple.eawt.Application;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.Timer;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -30,12 +31,13 @@ public class Escape extends javax.swing.JFrame {
         // use OS X menu bar 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Escape");
+
+        Application.getApplication().setDockIconImage(new ImageIcon("src/Escape/app.png").getImage());
         
         //initialize all components
         initComponents();
         this.setTitle("Escape - New file");
-        this.setBackground(new Color(136,102,57));
-        grid1.setBackground(new Color(136,102,57));
+        grid1.setBackground(Block.deadColor);
         // initialize open/save 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Escape file","ecp");
         jFileChooser1.addChoosableFileFilter(filter);
@@ -158,17 +160,11 @@ public class Escape extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(grid1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(grid1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(grid1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(grid1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
         );
 
         pack();
@@ -227,11 +223,11 @@ public class Escape extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         // Set the System look and feel
-        /*try { 
+        try { 
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Escape.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
         // Create and display the form 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

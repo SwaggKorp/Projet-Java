@@ -53,7 +53,7 @@ public class FileManager {
             int width = Integer.parseInt(reader.readLine());
             int height = Integer.parseInt(reader.readLine());
             window.setSize(width, height);
-            grid.resize(width-3, height-34);
+            grid.resize(width, height-34);
             grid.setBlocksState(loadGrid(reader));
             
             reader.close();
