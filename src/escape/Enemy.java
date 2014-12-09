@@ -51,22 +51,22 @@ public class Enemy extends Character {
         Enemy enemy = null;
         Random rand = new Random();
         EscapeGrid grid = window.getGrid();
+        EscapeBlock targetBlock;
+        
         int position;
         int side;
         while(!found) {
             side = rand.nextInt(2);  // select the side to spawn on (left/right or up/down)
             if(rand.nextBoolean()) { // spawn on vertical (true) or horizontal (false) side
-                position = rand.nextInt(grid.getGridHeight()); 
-                if(grid.getBlock(side*(grid.getGridWidth()-1), position).alive()) {
-                    found = true;
-                    enemy = new Enemy(grid.getBlock(side*(grid.getGridWidth()-1), position), window);
-                }
+                position = rand.nextInt(grid.getGridHeight());
+                targetBlock = grid.getBlock(side*(grid.getGridWidth()-1), position);
             } else {
                 position = rand.nextInt(grid.getGridWidth());
-                if(grid.getBlock(position, side*(grid.getGridHeight()-1)).alive()) {
+                targetBlock = grid.getBlock(position, side*(grid.getGridHeight()-1));
+            }
+            if(targetBlock.alive() && !targetBlock.hasCharacter()) {
                     found = true;
-                    enemy = new Enemy(grid.getBlock(position, side*(grid.getGridHeight()-1)), window);
-                }
+                    enemy = new Enemy(targetBlock, window);
             }
         }
         return enemy;

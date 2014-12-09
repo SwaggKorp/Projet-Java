@@ -1,7 +1,6 @@
 
 package escape;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 /*
@@ -26,7 +25,6 @@ public class EscapeGrid extends Grid {
             for(int j=0;j<gridHeight;j++) {
                 grid.get(j).get(i).setAlive(states[i][j]);
                 grid.get(j).get(i).reconnectAll();
-                grid.get(j).get(i).setAliveColor(new Color(137,220,115));
             }
         }
     }
@@ -34,7 +32,6 @@ public class EscapeGrid extends Grid {
         for(ArrayList<EscapeBlock> row : grid) {
             for(EscapeBlock block : row) {
                 block.setAlive(true);
-                block.setAliveColor(new Color(137,220,115));
             }
         }
         repaint();
@@ -43,7 +40,6 @@ public class EscapeGrid extends Grid {
         for(ArrayList<EscapeBlock> row : grid) {
             for(EscapeBlock block : row) {
                 block.setMarked(false);
-                block.setAliveColor(new Color(137,220,115));
             }
         }
     }

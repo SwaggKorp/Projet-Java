@@ -25,6 +25,12 @@ public class PathFinder {
         grid.clearMarks();
         
         root.setMarked(true);
+        // optimisation : 
+        for(EscapeBlock block : root.getNeighbours()) {
+            if(block.getFather()==root) {
+                block.setMarked(true);
+            }
+        }
         waitingBlocks.add(root);
         
         while(waitingBlocks.size()>0) {
@@ -49,14 +55,6 @@ public class PathFinder {
     }
     public void shortedPath(int rootx, int rooty, int targetx, int targety) {
         shorterPath(grid.getBlock(rootx, rooty), grid.getBlock(targetx, targety));
-    }
-    public void paintItBlue(EscapeBlock root,EscapeBlock target) {
-        EscapeBlock current = target;
-        while(!current.equals(root)) {
-            current.setAliveColor(new Color(56,177,239));
-            current = current.getFather();
-        }
-        root.setAliveColor(new Color(56,177,239));
     }
     public ArrayList<EscapeBlock> getPath(EscapeBlock root, EscapeBlock target) {
         ArrayList<EscapeBlock> path = new ArrayList<>();

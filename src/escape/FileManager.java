@@ -53,8 +53,9 @@ public class FileManager {
             int width = Integer.parseInt(reader.readLine());
             int height = Integer.parseInt(reader.readLine());
             window.setSize(width, height);
-            grid.resize(width-12, height-34);
+            grid.resize(width-3, height-34);
             grid.setBlocksState(loadGrid(reader));
+            
             reader.close();
         } catch(FileNotFoundException exc) {
             System.out.println("Erreur d'ouverture");
@@ -62,7 +63,6 @@ public class FileManager {
             Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (java.lang.NumberFormatException e) {
         }
-        
     }
     private boolean[][] loadGrid(BufferedReader reader) throws IOException {
         boolean[][] states = new boolean[grid.getGridWidth()][grid.getGridHeight()];

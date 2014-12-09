@@ -14,6 +14,7 @@ public class Grid extends javax.swing.JPanel {
     protected int gridWidth = 0;       
     protected int gridHeight = 0;
     private boolean editable = true;
+    private Object sleeper;
     
     public Grid() {
         super();                                                                // create a new JPanel

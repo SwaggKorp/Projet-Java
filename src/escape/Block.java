@@ -6,14 +6,13 @@ handles block display and user input in editting the grid
 package escape;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import javax.swing.JComponent;
 
 public abstract class Block extends JComponent {
     private int length;
     protected boolean alive = true;
-    protected Color aliveColor;
-    private Color deadColor;
+    protected final static Color aliveColor = new Color(137,220,115);
+    protected final static Color deadColor = new Color(136,102,57);
     protected Color characterColor;
     protected boolean hasCharacter;
     protected int charMargin;
@@ -36,8 +35,6 @@ public abstract class Block extends JComponent {
                 onClick();
             }
         });
-        aliveColor = new Color(137,220,115);
-        deadColor = new Color(136,102,57);
         
         repaint();
     }

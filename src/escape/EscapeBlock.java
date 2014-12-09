@@ -134,8 +134,4 @@ public class EscapeBlock extends Block{
         int[] pos = {x,y};
         return pos;
     }
-    public void setAliveColor(Color color) {
-        aliveColor = color;
-        repaint();
-    }
 }
