@@ -1,33 +1,48 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package escape;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.Timer;
 
 public class Enemy extends Character {
-    private Player player;
-    private PathFinder finder;
+    private static Player player;
+    private static Timer spawner;
+    private static Timer animator;
+    private static ArrayList<Enemy> enemies;
+    
     private ArrayList<EscapeBlock> path;
+    
+    static {
+        spawner = new Timer(1000, new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                     enemies.add(Enemy.spawn());
+                }
+        });
+        animator = new Timer(200, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                 for(int i=0;i<enemies.size();i++) {
+                     enemies.get(i).move();
+                 }
+            }
+        });
+        enemies = new ArrayList<>();
+    }
     
     public Enemy(EscapeBlock block, Escape window) {
         super(block, window, new Color(164,12,12));
-        
-        this.player = window.getPlayer();
-        this.finder = window.getPathFinder();
         
         this.enemy = true;
         path = new ArrayList<>();
     }
     public void move() {
         if(path.isEmpty()) {
-            path = finder.shorterPath(player.getBlock(), this.getBlock());
+            path = PathFinder.shorterPath(player.getBlock(), this.getBlock());
         } else if(!path.get(0).alive()) {
-            path = finder.shorterPath(player.getBlock(), this.getBlock());
+            path = PathFinder.shorterPath(player.getBlock(), this.getBlock());
         }
         else {
             if(path.get(0).hasCharacter()) {
@@ -44,13 +59,12 @@ public class Enemy extends Character {
     }
     public void destroy() {
         this.block.removeCharacter();
-        window.removeEnemy(this);
+        enemies.remove(this);
     }
-    public static Enemy spawn(Escape window) {
+    public static Enemy spawn() {
         boolean found = false;
         Enemy enemy = null;
         Random rand = new Random();
-        EscapeGrid grid = window.getGrid();
         EscapeBlock targetBlock;
         
         int position;
@@ -70,5 +84,23 @@ public class Enemy extends Character {
             }
         }
         return enemy;
+    }
+    public static void reset() {
+        freeze();
+        while(!enemies.isEmpty()) {
+            enemies.get(0).destroy();
+        }
+        animate();
+    }
+    public static void freeze() {
+        animator.stop();
+        spawner.stop();
+    }
+    public static void animate() {
+        animator.start();
+        spawner.start();
+    }
+    public static void setPlayer(Player player) {
+        Enemy.player = player;
     }
 }

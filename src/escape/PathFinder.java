@@ -5,32 +5,25 @@
  */
 package escape;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
-/**
- *
- * @author arnaud
- */
 public class PathFinder {
-    private EscapeGrid grid;
+    private static Grid grid;
     
-    public PathFinder(EscapeGrid grid) {
-        this.grid = grid;
-    }
-    public ArrayList<EscapeBlock> shorterPath(EscapeBlock root, EscapeBlock target) {
+    public static ArrayList<EscapeBlock> shorterPath(EscapeBlock root, EscapeBlock target) {
         ArrayList<EscapeBlock> waitingBlocks = new ArrayList<>();
-        ArrayList<EscapeBlock> path = new ArrayList<>();
+        ArrayList<EscapeBlock> path;
         EscapeBlock current;
-        grid.clearMarks();
+        clearMarks();
         
-        root.setMarked(true);
-        // optimisation : 
+        /* optimisation : 
         for(EscapeBlock block : root.getNeighbours()) {
             if(block.getFather()==root) {
                 block.setMarked(true);
             }
-        }
+        }*/
+        
+        root.setMarked(true);
         waitingBlocks.add(root);
         
         while(waitingBlocks.size()>0) {
@@ -50,13 +43,8 @@ public class PathFinder {
         }
         return new ArrayList<>();
     }
-    public void shorterPath(int[] rootLocation, int[] targetLocation) {
-        shortedPath(rootLocation[0],rootLocation[1],targetLocation[0],targetLocation[1]);
-    }
-    public void shortedPath(int rootx, int rooty, int targetx, int targety) {
-        shorterPath(grid.getBlock(rootx, rooty), grid.getBlock(targetx, targety));
-    }
-    public ArrayList<EscapeBlock> getPath(EscapeBlock root, EscapeBlock target) {
+   
+    public static ArrayList<EscapeBlock> getPath(EscapeBlock root, EscapeBlock target) {
         ArrayList<EscapeBlock> path = new ArrayList<>();
         EscapeBlock current = target;
         while(!current.equals(root)) {
@@ -64,5 +52,15 @@ public class PathFinder {
             path.add(current);
         }
         return path;
+    }
+    private static void clearMarks() {
+        for(int i=0;i<grid.getGridWidth(); i++) {
+            for(int j=0;j<grid.getGridHeight();j++) {
+                grid.getBlock(i,j).setMarked(false);
+            }
+        }
+    }
+    public static void setGrid(Grid grid) {
+        PathFinder.grid = grid;
     }
 }

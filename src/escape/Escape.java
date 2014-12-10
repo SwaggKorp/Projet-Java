@@ -2,73 +2,28 @@
 package escape;
 
 import com.apple.eawt.Application;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.Timer;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Escape extends javax.swing.JFrame {
     
     private FileManager fileManager;
-    private PathFinder finder;
-    
     private Player player;
-    private CopyOnWriteArrayList<Enemy> enemies;
-    
-    private Timer arrowsManager;
-    private Direction currentDirection;
-    private Timer enemyManager;
-    private Timer spawnManager;
     
     // Creates new form Escape
     public Escape() {
-        // use OS X menu bar 
+        // use OS X menu bar
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Escape");
-
+        // set OS X dock icon
         Application.getApplication().setDockIconImage(new ImageIcon("src/Escape/app.png").getImage());
-        
         //initialize all components
         initComponents();
-        this.setTitle("Escape - New file");
-        grid1.setBackground(Block.deadColor);
         // initialize open/save 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Escape file","ecp");
-        jFileChooser1.addChoosableFileFilter(filter);
-        jFileChooser1.setFileFilter(filter);
-        fileManager = new FileManager(this, grid1);
-        // create a tool that computes shorter path
-        finder = new PathFinder(grid1);
+        fileManager = new FileManager(this, grid);
         
-        enemies = new CopyOnWriteArrayList<>();
-        
-        arrowsManager = new Timer(90, new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                 player.move(currentDirection);
-            }
-        });
-        final Escape window = this;
-        spawnManager = new Timer(1000, new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                 enemies.add(Enemy.spawn(window));
-            }
-        });
-        enemyManager = new Timer(200, new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                 for(Enemy enemy : enemies) {
-                     enemy.move();
-                 }
-            }
-        });
-        
-        gameOverMenu1.setVisible(false);
-        gameOverMenu1.setWindow(this);
+        Character.setWindow(this);
+        gameOverMenu.setWindow(this);
     }
 
     // auto-generated UI settings
@@ -76,9 +31,8 @@ public class Escape extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        grid1 = new escape.EscapeGrid();
-        gameOverMenu1 = new escape.GameOverMenu();
+        grid = new escape.Grid();
+        gameOverMenu = new escape.GameOverMenu();
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         newMenu = new javax.swing.JMenuItem();
@@ -98,8 +52,8 @@ public class Escape extends javax.swing.JFrame {
             }
         });
 
-        grid1.add(gameOverMenu1);
-        gameOverMenu1.setBounds(60, 20, 397, 300);
+        grid.add(gameOverMenu);
+        gameOverMenu.setBounds(70, 20, 397, 300);
 
         jMenu5.setText("File");
 
@@ -160,63 +114,44 @@ public class Escape extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(grid1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+            .addComponent(grid, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(grid1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+            .addComponent(grid, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveasMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveasMenuActionPerformed
-        int result = jFileChooser1.showSaveDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION) {
-            fileManager.save(jFileChooser1.getSelectedFile().getPath());
-        }
+        fileManager.saveFileDialog();
     }//GEN-LAST:event_saveasMenuActionPerformed
 
     private void newMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newMenuActionPerformed
-        grid1.clear();
         fileManager.newFile();
     }//GEN-LAST:event_newMenuActionPerformed
 
     private void saveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuActionPerformed
-        if(fileManager.isNewFile()) {
-            int result = jFileChooser1.showSaveDialog(this);
-            if(result == JFileChooser.APPROVE_OPTION)
-                fileManager.save(jFileChooser1.getSelectedFile().getPath()+".ecp");
-        } else { 
-            fileManager.save();
-        }
+        fileManager.save();
     }//GEN-LAST:event_saveMenuActionPerformed
 
     private void openMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuActionPerformed
-        int result = jFileChooser1.showOpenDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION) {
-            fileManager.open(jFileChooser1.getSelectedFile().getPath());
-        }
+        fileManager.openFileDialog();
     }//GEN-LAST:event_openMenuActionPerformed
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-        if(Direction.fromKeyCode(evt.getKeyCode())==currentDirection)
-            arrowsManager.stop();  
+        if(player!=null)
+            player.stopMoving(Direction.fromKeyCode(evt.getKeyCode()));  
     }//GEN-LAST:event_formKeyReleased
 
     private void spawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spawnActionPerformed
-        resetGame();
+        newGame();
     }//GEN-LAST:event_spawnActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if(player!=null) {
-            currentDirection = Direction.fromKeyCode(evt.getKeyCode());
-            if(currentDirection != Direction.none) {
-                currentDirection = Direction.fromKeyCode(evt.getKeyCode());
-                player.move(currentDirection);
-                arrowsManager.start();
-            } 
-        }
+        if(player!=null)
+            player.startMoving(Direction.fromKeyCode(evt.getKeyCode()));
     }//GEN-LAST:event_formKeyPressed
     /**
      * @param args the command line arguments
@@ -226,10 +161,10 @@ public class Escape extends javax.swing.JFrame {
         try { 
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Escape.class.getName()).log(Level.SEVERE, null, ex);
         }
         // Create and display the form 
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Escape().setVisible(true);
                 
@@ -237,44 +172,25 @@ public class Escape extends javax.swing.JFrame {
         });
     }
     
-    public Player getPlayer() {
-        return player;
-    }
-    public EscapeGrid getGrid() {
-        return grid1;
-    }
-    public PathFinder getPathFinder() {
-        return finder;
-    }
-    public void resetGame() {
-        gameOverMenu1.setVisible(false);
-        grid1.setEditable(false);
+    public void newGame() {
+        gameOverMenu.setVisible(false);
+        grid.setEditable(false);
         
-        for(Enemy enemy : enemies) {
-            enemy.destroy();
-        }
-        
-        player = new Player(grid1.getBlock(0, 0),this);
-        enemies.add(Enemy.spawn(this));
-        enemyManager.start();
-        spawnManager.start();
+        player = new Player(grid.getBlock(0, 0),this);
+        Enemy.reset();
     }
     public void displayGameOver() {
-        enemyManager.stop();
-        spawnManager.stop();
-        gameOverMenu1.setVisible(true);
+        Enemy.freeze();
+        gameOverMenu.resize();
+        gameOverMenu.setVisible(true);
         
         player.destroy();
         player = null;
     }
-    public void removeEnemy(Enemy enemy) {
-        enemies.remove(enemy);
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu PlayerMenu;
-    private escape.GameOverMenu gameOverMenu1;
-    private escape.EscapeGrid grid1;
-    private javax.swing.JFileChooser jFileChooser1;
+    private escape.GameOverMenu gameOverMenu;
+    private escape.Grid grid;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem newMenu;

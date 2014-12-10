@@ -5,21 +5,20 @@ handles pathfinding variables and connections for each block
  */
 package escape;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 public class EscapeBlock extends Block{
+    private static Grid grid;
+    
     private boolean marked;
     private EscapeBlock father;
     private ArrayList<EscapeBlock> neighbours; 
     private int x;
     private int y;
-    private Grid grid;
     private Character character;
     
-    public EscapeBlock(int length,Grid grid, int x, int y) {
-        super(length);
-        this.grid = grid;
+    public EscapeBlock(int x, int y) {
+        super();
         this.x = x;
         this.y = y;
         neighbours = new ArrayList<>();
@@ -93,7 +92,7 @@ public class EscapeBlock extends Block{
             neighbours.get(i).reconnect();
     }
     
-    // #################   CHARACTER   ###################
+    // #####################   CHARACTER   #######################
     @Override
     public void addCharacter(Character character) {
         this.character = character;
@@ -111,7 +110,7 @@ public class EscapeBlock extends Block{
         return character.isEnemy();
     }
     
-    // getters and setters
+    // #################   GETTERS & SETTERS   ###################
     public boolean isMarked() {
         return marked;
     }
@@ -133,5 +132,8 @@ public class EscapeBlock extends Block{
     public int[] getPosition() {
         int[] pos = {x,y};
         return pos;
+    }
+    public static void setGrid(Grid grid) {
+        EscapeBlock.grid = grid;
     }
 }

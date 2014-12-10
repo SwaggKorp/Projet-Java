@@ -13,18 +13,18 @@ import java.awt.event.KeyEvent;
  * @author arnaud
  */
 public abstract class Character {
+    public static int margin = 3;
+    protected static Grid grid;
+    protected static Escape window;
+    
     protected Color color;
-    private int margin = 3;
     protected boolean enemy;
     protected EscapeBlock block;
-    protected EscapeGrid grid;
-    protected Escape window;
     
     public Character(EscapeBlock source, Escape window, Color color) {
         block = source;
-        this.grid = window.getGrid();
         this.color = color;
-        this.window = window;
+        //this.window = window;
         
         source.addCharacter(this);
     }
@@ -66,5 +66,11 @@ public abstract class Character {
     }
     public EscapeBlock getBlock() {
         return block;
+    }
+    public static void setGrid(Grid grid) {
+        Character.grid = grid;
+    }
+    public static void setWindow(Escape window) {
+        Character.window = window;
     }
 }

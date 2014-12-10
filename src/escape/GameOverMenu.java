@@ -16,17 +16,10 @@ public class GameOverMenu extends javax.swing.JPanel {
      */
     public GameOverMenu() {
         initComponents();
-        this.setFocusable(false);
-        this.jButton1.setFocusable(false);
-        this.jLabel1.setFocusable(false);
-    }
-    public GameOverMenu(Escape window) {
-        initComponents();
-        this.window = window;
-        
-        int x = (window.getGrid().getWidth()-397)/2;
-        int y = (window.getGrid().getHeight()-300)/2;
-        this.setBounds(0, 0, 397, 300);
+        setFocusable(false);
+        setVisible(false);
+        jButton1.setFocusable(false);
+        jLabel1.setFocusable(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -70,12 +63,16 @@ public class GameOverMenu extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        window.resetGame();
+        window.newGame();
     }//GEN-LAST:event_jButton1ActionPerformed
     public void setWindow(Escape window) {
         this.window = window;
     }
-
+    public void resize() {
+        int x = (window.getWidth()-397)/2;
+        int y = (window.getHeight()-320)/2;
+        this.setBounds(x, y, 397, 300);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

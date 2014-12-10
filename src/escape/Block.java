@@ -9,20 +9,18 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 
 public abstract class Block extends JComponent {
-    private int length;
-    protected boolean alive = true;
-    
+    public final static int length = 23;                                        // the size of a block
     public final static Color aliveColor = new Color(255,206,87);
     public final static Color deadColor = new Color(57,57,57);
     
+    protected boolean alive = true;
     protected Color characterColor;
     protected boolean hasCharacter;
-    protected int charMargin;
     
-    public Block(int length) {
+    
+    public Block() {
         super();
         
-        this.length = length;
         this.setSize(length, length);
         this.setFocusable(false);
         
@@ -42,8 +40,6 @@ public abstract class Block extends JComponent {
     }
     @Override
     public void paint(Graphics g) {
-        g.setColor(Color.LIGHT_GRAY);
-        g.drawRect(0, 0, length, length);
         if(alive)
             g.setColor(aliveColor);
         else 
@@ -53,7 +49,7 @@ public abstract class Block extends JComponent {
         
         if(hasCharacter) {
             g.setColor(characterColor); 
-            g.fillOval(charMargin, charMargin, length-2*charMargin, length-2*charMargin);
+            g.fillOval(Character.margin, Character.margin, length-2*Character.margin, length-2*Character.margin);
         }
        
     }
@@ -69,7 +65,6 @@ public abstract class Block extends JComponent {
         repaint();
     }
     protected void addCharacter(Character character) {
-        charMargin = character.getMargin();
         characterColor = character.getColor();
         hasCharacter = true;
         repaint();
