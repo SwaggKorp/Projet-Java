@@ -101,4 +101,28 @@ public class GameGrid {
     public ArrayList<ArrayList<Block>> getBlocks(){
         return blocks;
     }
+
+    public ArrayList<Block> getNeighbours(Block block){
+        ArrayList<Block> neighbours = new ArrayList<Block>();
+        int j = block.getxPos();
+        int i = block.getyPos();
+
+        if(j > 0)
+            if(blocks.get(i).get(j-1).getState() == Block.STATE_FIELD)
+                neighbours.add(blocks.get(i).get(j-1));
+
+        if(i > 0)
+            if(blocks.get(i-1).get(j).getState() == Block.STATE_FIELD)
+                neighbours.add(blocks.get(i-1).get(j));
+
+        if(i < MainActivity.gridRowNumber-1)
+            if(blocks.get(i+1).get(j).getState() == Block.STATE_FIELD)
+                neighbours.add(blocks.get(i+1).get(j));
+
+        if(j < MainActivity.gridColumnNumber-1)
+            if(blocks.get(i).get(j+1).getState() == Block.STATE_FIELD)
+                neighbours.add(blocks.get(i).get(j+1));
+
+        return neighbours;
+    }
 }

@@ -115,19 +115,19 @@ public class Joystick {
         return angle;
     }
 
-    public int getDirection(){
+    public Direction getDirection(){
         if(touchDown && distance >= minDistance){
             float quarterPi = (float) Math.PI/4;
             if(angle < quarterPi || angle > 7*quarterPi)
-                return 1;
+                return Direction.right;
             else if(angle < 3*quarterPi && angle > quarterPi)
-                return 2;
+                return Direction.down;
             else if(angle < 5*quarterPi && angle > 3*quarterPi)
-                return 3;
+                return Direction.left;
             else if(angle < 7*quarterPi && angle > 5*quarterPi)
-                return 4;
+                return Direction.up;
         }
-        return 0;
+        return Direction.none;
     }
 
     private double calculateAngle(float x, float y){   // Between 0 and 2Pi clockwise!

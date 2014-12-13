@@ -23,18 +23,18 @@ public abstract class Character {
 
     public abstract Bitmap getSkin();
 
-    public void move(int keycode){    // Can't be arsed with ifs
-        switch(keycode){
-            case 1:
+    public void move(Direction direction){    // Can't be arsed with ifs
+        switch(direction){
+            case right:
                 moveRight();
                 break;
-            case 2:
+            case down:
                 moveDown();
                 break;
-            case 3:
+            case left:
                 moveLeft();
                 break;
-            case 4:
+            case up:
                 moveUp();
                 break;
             default:
@@ -93,6 +93,10 @@ public abstract class Character {
                 characterBlock = newBlock;
             }
     }
+    }
+
+    public Block getCharacterBlock(){
+        return characterBlock;
     }
 
 }

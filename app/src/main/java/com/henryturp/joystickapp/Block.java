@@ -46,7 +46,7 @@ public class Block extends View {
 
     @Override
     public void onDraw(Canvas canvas){
-        if(blockState==0)
+        if(blockState==STATE_FIELD)
             paint.setColor(backgroundColour);
         else
             paint.setColor(wallColour);
@@ -71,6 +71,10 @@ public class Block extends View {
         invalidate();
     }
 
+
+    public boolean equals(Block block) {
+        return (block.getxPos()==xPos && block.getyPos()==yPos);
+    }
 
     /* GETTERS AND SETTERS */
     public void setState(int state){

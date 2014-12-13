@@ -47,6 +47,7 @@
         android:clickable="true"
         android:background="@drawable/icon_42544_smaller_inverted"/>
 
+
     <RelativeLayout
         android:id="@+id/menuLayout"
         android:layout_width="match_parent"
