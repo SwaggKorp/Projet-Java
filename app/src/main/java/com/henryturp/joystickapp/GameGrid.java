@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 public class GameGrid {
     private Context mContext;
+    private GameHandler gameHandler;
     private GridLayout mLayout;
     private ArrayList<ArrayList<Block>> blocks;
 
@@ -26,8 +27,9 @@ public class GameGrid {
     private boolean touchDown = false;
     private Block lastBlock;
 
-    public GameGrid(Context context, GridLayout layout,int row, int col, int width, int height){
+    public GameGrid(Context context,GameHandler gameHandler, GridLayout layout,int row, int col, int width, int height){
         mContext = context;
+        this.gameHandler = gameHandler;
         mLayout = layout;
 
         mHeight = height;
@@ -81,7 +83,7 @@ public class GameGrid {
         for(int i = 0; i<rows; i++){                           // Adds the blocks.
             ArrayList<Block> blockRow = new ArrayList<Block>();
             for(int j = 0; j<columns; j++){
-                Block temp = new Block(mContext, blockSize,i,j);
+                Block temp = new Block(mContext,gameHandler, blockSize,i,j);
                 blockRow.add(temp);
                 mLayout.addView(temp);
             }

@@ -41,7 +41,6 @@ public abstract class Character {
                 break;
         }
     }
-    public abstract void kill();
 
     protected void moveUp(){
         int xPos = characterBlock.getxPos();

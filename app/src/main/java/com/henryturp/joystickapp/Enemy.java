@@ -33,10 +33,7 @@ public class Enemy extends Character{
         calculatePath();
     }
 
-    @Override
-    public void kill() {
 
-    }
 
 
     public void move(){

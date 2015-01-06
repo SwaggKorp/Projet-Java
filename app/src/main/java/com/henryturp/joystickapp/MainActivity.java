@@ -35,6 +35,8 @@ public class MainActivity extends Activity {
     private GameGrid gameGrid;
     private FileManager fileManager;
     private Joystick joystick;
+    private GameHandler gameHandler;
+    private Player player;
 
     private Timer playerTimer;
     private TimerTask playerTimerTask;
@@ -83,10 +85,10 @@ public class MainActivity extends Activity {
         joystick.setStickSize(100,100);
         joystick.setLayoutSize(270,270);
 
-        gameGrid = new GameGrid(getApplicationContext(),gameGridLayout,gridRowNumber,gridColumnNumber,984,1295);   // Creates game Grid
-        fileManager= new FileManager(gameGrid.getBlocks(),getApplicationContext());                  // Create joystick
-
-        final Player player = new Player(gameGrid.getBlocks().get(10).get(12),getApplicationContext(),gameGrid.getBlocks(),R.drawable.star_shape);
+        gameHandler = new GameHandler(enemies);
+        gameGrid = new GameGrid(getApplicationContext(),gameHandler,gameGridLayout,gridRowNumber,gridColumnNumber,984,1295);   // Creates game Grid
+        fileManager = new FileManager(gameGrid.getBlocks(),getApplicationContext());                  // Create joystick
+        player = new Player(gameGrid.getBlocks().get(10).get(12),getApplicationContext(),gameGrid.getBlocks(),R.drawable.star_shape);
 
         playerTimerTask = new TimerTask(){
             @Override
@@ -102,8 +104,8 @@ public class MainActivity extends Activity {
         playerTimer = new Timer();
         playerTimer.scheduleAtFixedRate(playerTimerTask, 0, playDelay);
 
-        addEnemy(player,19,24);
-        addEnemy(player,0,0);
+        addEnemy(0,0);
+        addEnemy(19,19);
 
         enemyTimerTask = new TimerTask(){
             @Override
@@ -237,9 +239,8 @@ public class MainActivity extends Activity {
         fileSpinner.setAdapter(adapter);
     }
 
-    private void addEnemy(Player target, int x, int y){
-        Enemy enemy = new Enemy(gameGrid.getBlocks().get(y).get(x),target,getApplicationContext(),gameGrid,R.drawable.diamond_shape);
-        enemies.add(enemy);
+    private void addEnemy(int x, int y){
+        Enemy enemy = new Enemy(gameGrid.getBlocks().get(y).get(x),player,getApplicationContext(),gameGrid,R.drawable.diamond_shape);
+        gameHandler.addEnemy(enemy);
     }
-
 }

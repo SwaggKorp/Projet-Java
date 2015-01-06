@@ -13,7 +13,8 @@ import android.view.ViewGroup;
  */
 public class Block extends View {
 
-    private Context mContext;
+    private Context mContext; // Needed to instantiate View...
+    private GameHandler gameHandler;
     private Paint paint;
     private int backgroundColour = Color.parseColor(MainActivity.FIELD_COLOUR);
     private int wallColour = Color.parseColor(MainActivity.WALL_COLOUR);
@@ -29,8 +30,9 @@ public class Block extends View {
 
     private int blockState = STATE_FIELD;
 
-    public Block(Context context, int side, int i, int j){
+    public Block(Context context,GameHandler gameHandler, int side, int i, int j){
         super(context);
+        this.gameHandler = gameHandler;
 
         paint = new Paint();
         mContext = context;
@@ -60,20 +62,17 @@ public class Block extends View {
     }
 
     /* CHARACTER RELATED FUNCTIONS*/
-    public void setCharacter(Character charact) {
+    public void setCharacter(Character charact) {         // Doesn't check if there is already a character!!
         if (!hasCharacter) {
             character = charact;
             hasCharacter = true;
             invalidate();
-        } else if (character.getStatus() != charact.getStatus()) { // Player and enemy collide
-            if(character.getStatus())  // Kill the player which is either charact or character.
-                character.kill();
-            else
-                charact.kill();
         }
-        else {  // Two ennemies collide --> They both die.
-            charact.kill();
-            character.kill();
+        else if(charact.getStatus() == character.getStatus()){  // Two enemies collide.
+            gameHandler.killEnemy((Enemy)charact);
+            gameHandler.killEnemy((Enemy)character);        }
+        else{  // Enemy and player collide
+            gameHandler.endGame();
         }
     }
 
