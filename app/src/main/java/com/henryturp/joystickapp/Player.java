@@ -21,6 +21,11 @@ public class Player extends Character {
         skin = Bitmap.createScaledBitmap(skin,source.getSide(),source.getSide(),false);
     }
 
+    @Override
+    public void kill() {
+
+    }
+
     public Bitmap getSkin(){
         return skin;
     }

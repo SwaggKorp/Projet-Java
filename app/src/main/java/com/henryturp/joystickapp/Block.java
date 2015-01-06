@@ -60,11 +60,24 @@ public class Block extends View {
     }
 
     /* CHARACTER RELATED FUNCTIONS*/
-    public void setCharacter(Character charact){
-        character = charact;
-        hasCharacter = true;
-        invalidate();
+    public void setCharacter(Character charact) {
+        if (!hasCharacter) {
+            character = charact;
+            hasCharacter = true;
+            invalidate();
+        } else if (character.getStatus() != charact.getStatus()) { // Player and enemy collide
+            if(character.getStatus())  // Kill the player which is either charact or character.
+                character.kill();
+            else
+                charact.kill();
+        }
+        else {  // Two ennemies collide --> They both die.
+            charact.kill();
+            character.kill();
+        }
     }
+
+
     public void removeCharacter(){
         character = null;
         hasCharacter = false;

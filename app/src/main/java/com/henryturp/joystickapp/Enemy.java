@@ -33,6 +33,11 @@ public class Enemy extends Character{
         calculatePath();
     }
 
+    @Override
+    public void kill() {
+
+    }
+
 
     public void move(){
         move(currentDirection);
@@ -48,7 +53,6 @@ public class Enemy extends Character{
         ArrayList<Block> blocksPath = pathfinder.shortestPath(this.characterBlock, target.getCharacterBlock());
         path = directions(blocksPath);  // check pathfinder and stuff by colouring.
     }
-
 
     public Bitmap getSkin(){
         return skin;

@@ -16,36 +16,39 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
-    RelativeLayout joystickLayout;
-    RelativeLayout menuLayout;
-    GridLayout gameGridLayout;
-    RelativeLayout mainLayout;
-    ImageView menu_button;
-    Button resetButton, saveButton, deleteButton;
-    EditText saveEditText;
-    Spinner fileSpinner;
+    private RelativeLayout joystickLayout;
+    private RelativeLayout menuLayout;
+    private GridLayout gameGridLayout;
+    private RelativeLayout mainLayout;
+    private ImageView menu_button;
+    private Button resetButton, saveButton, deleteButton;
+    private EditText saveEditText;
+    private Spinner fileSpinner;
 
-    GameGrid gameGrid;
-    FileManager fileManager;
-    Joystick joystick;
+    private GameGrid gameGrid;
+    private FileManager fileManager;
+    private Joystick joystick;
 
-    Timer playerTimer;
-    TimerTask playerTimerTask;
-    Timer enemyTimer;
-    TimerTask enemyTimerTask;
-    Direction playerDirection = Direction.none;
+    private Timer playerTimer;
+    private TimerTask playerTimerTask;
+    private Timer enemyTimer;
+    private TimerTask enemyTimerTask;
+    private Direction playerDirection = Direction.none;
+
+    private final ArrayList<Enemy> enemies = new ArrayList<>();
 
     public final static int gridColumnNumber = 20; // FIXED GRID SIZE. We chose 20, feels accurate enough.
     public final static int gridRowNumber = 25;
-    public final static String FIELD_COLOUR = "#ff905358";
-    public final static String WALL_COLOUR = "#ff372a3b";
-    public final static String BACKGROUND_COLOUR = "#ff372a3b";
+    public final static String FIELD_COLOUR = "#ffffce57";
+    public final static String WALL_COLOUR = "#ff393939";
+    public final static String BACKGROUND_COLOUR = "#ffffce57";
     public final static int playDelay = 100;
     public final static int enemyDelay = 120;
 
@@ -63,19 +66,14 @@ public class MainActivity extends Activity {
 
         mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         mainLayout.setBackgroundColor(Color.parseColor(BACKGROUND_COLOUR));
-
         joystickLayout = (RelativeLayout) findViewById(R.id.layout_joystick);
         gameGridLayout = (GridLayout) findViewById(R.id.layout_grid);
-
         menuLayout = (RelativeLayout) findViewById(R.id.menuLayout);
         menu_button = (ImageView) findViewById(R.id.menu_icon);
-
         resetButton = (Button) findViewById(R.id.resetButton);
         saveButton = (Button) findViewById(R.id.saveButton);
         deleteButton = (Button) findViewById(R.id.deleteButton);
-
         saveEditText = (EditText) findViewById(R.id.saveEditText);
-
 
         joystick = new Joystick(getApplicationContext(),joystickLayout,R.drawable.image_button);
         joystick.setMinDistance(20);
@@ -88,7 +86,8 @@ public class MainActivity extends Activity {
         gameGrid = new GameGrid(getApplicationContext(),gameGridLayout,gridRowNumber,gridColumnNumber,984,1295);   // Creates game Grid
         fileManager= new FileManager(gameGrid.getBlocks(),getApplicationContext());                  // Create joystick
 
-        final Player player = new Player(gameGrid.getBlocks().get(10).get(10),getApplicationContext(),gameGrid.getBlocks(),R.drawable.star_shape);
+        final Player player = new Player(gameGrid.getBlocks().get(10).get(12),getApplicationContext(),gameGrid.getBlocks(),R.drawable.star_shape);
+
         playerTimerTask = new TimerTask(){
             @Override
             public void run() {
@@ -103,19 +102,23 @@ public class MainActivity extends Activity {
         playerTimer = new Timer();
         playerTimer.scheduleAtFixedRate(playerTimerTask, 0, playDelay);
 
+        addEnemy(player,19,24);
+        addEnemy(player,0,0);
 
-        final Enemy enemy = new Enemy(gameGrid.getBlocks().get(24).get(19),player,getApplicationContext(),gameGrid,R.drawable.diamond_shape);
         enemyTimerTask = new TimerTask(){
             @Override
-            public void run() {
+            public void run() {        // Deals with all the enemies' movements.
                 runOnUiThread(new Runnable() {  // Timer can't access views that aren't from its own thread!!
                     @Override
                     public void run(){
-                        enemy.move();
+                        int len = enemies.size();
+                        for(int i = 0; i<len; i++)    // Moves each existing enemy
+                            enemies.get(i).move();
                     }
                 });
             }
         };
+
         enemyTimer = new Timer();
         enemyTimer.scheduleAtFixedRate(enemyTimerTask, 0, enemyDelay);
 
@@ -233,4 +236,10 @@ public class MainActivity extends Activity {
 
         fileSpinner.setAdapter(adapter);
     }
+
+    private void addEnemy(Player target, int x, int y){
+        Enemy enemy = new Enemy(gameGrid.getBlocks().get(y).get(x),target,getApplicationContext(),gameGrid,R.drawable.diamond_shape);
+        enemies.add(enemy);
+    }
+
 }

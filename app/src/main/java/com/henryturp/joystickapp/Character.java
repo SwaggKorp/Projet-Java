@@ -41,6 +41,7 @@ public abstract class Character {
                 break;
         }
     }
+    public abstract void kill();
 
     protected void moveUp(){
         int xPos = characterBlock.getxPos();
@@ -98,5 +99,7 @@ public abstract class Character {
     public Block getCharacterBlock(){
         return characterBlock;
     }
+
+    public boolean getStatus(){ return enemy; }
 
 }
