@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:textColor="#ffffffff"
+    android:textColor="#ff000000"
     android:textSize="20sp"
-    android:background="@drawable/menu_5e3941"
+    android:background="@drawable/menu_ffffff"
     android:text="@string/spinner_prompt"
     style="?android:attr/spinnerItemStyle">
 

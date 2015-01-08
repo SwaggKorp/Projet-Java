@@ -69,8 +69,8 @@ public class Block extends View {
             invalidate();
         }
         else if(charact.getStatus() == character.getStatus()){  // Two enemies collide.
-            gameHandler.killEnemy((Enemy)charact);
-            gameHandler.killEnemy((Enemy)character);        }
+            gameHandler.killEnemy((Enemy)charact,true);
+            gameHandler.killEnemy((Enemy)character,true);        }
         else{  // Enemy and player collide
             gameHandler.endGame();
         }
