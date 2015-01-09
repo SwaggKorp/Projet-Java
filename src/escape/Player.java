@@ -5,39 +5,44 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
-
+/*
+ * Player handles the player movements according to the user keyboard commands
+ */
 public class Player extends Character {
-    private Timer movementManager;
-    private Direction currentDirection;
+    private Timer movementManager;        // repeats last move
+    private Direction currentDirection;   // the current direction (if any) the player is moving in
     
     public Player(EscapeBlock block) {
         super(block, new Color(44,128,143));
         this.enemy = false;
-        
+        // repeat a previous step if the corresponding arrow is maintained down
         movementManager = new Timer(90, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                  move(currentDirection);
             }
         });
-        Enemy.setPlayer(this);
+        Enemy.setPlayer(this);   // provide a link to the player
     }
+    // when a key is pressed, start moving in the specified direction
     public void startMoving(Direction direction) {
-        if(direction != Direction.none) {
+        if(direction != Direction.none) {   // if the key is actually an arrow
             currentDirection = direction;
             move(currentDirection);
             movementManager.start();
         }
     }
+    // when the key is released, stop moving
     public void stopMoving(Direction direction) {
-        if(direction == currentDirection) {
+        if(direction == currentDirection) {          // if the previously pressed arrow has been released
             movementManager.stop();
         }
     }
+    // move the player in the specified direction
     public void move(Direction direction) {
         int x = block.getPosition()[0];
         int y = block.getPosition()[1];
         EscapeBlock newBlock = null;
-        
+        // get the new block the player is on if it can move there
         switch(direction) {
             case left:
                 if(x>0 && grid.getBlock(x-1, y).alive())
@@ -66,9 +71,9 @@ public class Player extends Character {
                 window.displayGameOver(); 
         }
     }
+    // remove the player from the grid
     public void destroy() {
         block.removeCharacter();
         movementManager.stop();
     }
-    
 }

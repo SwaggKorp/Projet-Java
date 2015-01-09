@@ -1,3 +1,10 @@
+/*
+    Escape! a 2D pac-man like survival game
+    This code was written by Henry Turp and Arnaud Bonetti.
+    You may find the lastest version at : https://github.com/SwaggKorp/Escape
+    
+    See readme for additional info on this program
+*/
 
 package escape;
 
@@ -176,8 +183,7 @@ public class Escape extends javax.swing.JFrame {
 
     private void editModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editModeActionPerformed
         gameOverMenu.setVisible(false);
-        Enemy.reset();          // remove all enemies (and restart spawner)
-        Enemy.freeze();         // suspend spawner
+        Enemy.reset();          // remove all enemies
         grid.resetBlockColor(); // reset alive block colors
         if(player!=null)        // if a player was created
             player.destroy();
@@ -205,9 +211,10 @@ public class Escape extends javax.swing.JFrame {
         gameOverMenu.setVisible(false); 
         grid.setEditable(false);                       // make sure the game grid can't be edited during the game
         
-        player = new Player(grid.getBlock(0, 0));      
-        Enemy.reset();                                 // destroy all previous enemy and restart spawner
+        player = new Player(grid.getBlock(1, 1));      
+        Enemy.reset();                                 // destroy all previous enemies
         grid.resetBlockColor();                        // reset alive block colors
+        Enemy.animate();                               // restart enemy spawner
         scoreCounter.startGame();                      // start counting score
     }
     // when the player was hit, show game over 
