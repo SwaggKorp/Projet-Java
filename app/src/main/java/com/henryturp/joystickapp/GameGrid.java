@@ -39,16 +39,16 @@ public class GameGrid {
 
         rows = row;
         columns = col;
-        setupGrid(col);
+        setupGrid();
 
-        mLayout.setOnTouchListener(new View.OnTouchListener() {
+        mLayout.setOnTouchListener(new View.OnTouchListener() {    // Listener that handles the users finger sliging across the screen.
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(editState) {  // If grid is not in 'edit mode' this basically does nothing.
                     for (int i = 0; i < mLayout.getChildCount(); i++) {
                         Block child = (Block) mLayout.getChildAt(i);
                         Rect outRect = new Rect(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
-                        if (outRect.contains((int) event.getX(), (int) event.getY())) {
+                        if (outRect.contains((int) event.getX(), (int) event.getY())) {    // This checks that the user's finger hass changed blocks or not.
                             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                                 touchDown = true;
                                 lastBlock = child;
@@ -74,7 +74,7 @@ public class GameGrid {
 
     }
 
-    public void setupGrid(int col){    // MUST BE MADE PRIVATE when FileManager is recoded.
+    private void setupGrid(){ // Draws the grid for the first time.
         blockSize = mWidth / columns;
 
         blocks = new ArrayList<ArrayList<Block>>();
@@ -92,8 +92,7 @@ public class GameGrid {
             blocks.add(blockRow);
         }
     }
-
-    public void resetGrid(){
+    public void resetGrid(){   // Resets all blocks to field state.
         for(int i = 0; i<rows; i++){
             for(int j = 0; j<columns; j++){
                 if(blocks.get(i).get(j).getState() == Block.STATE_WALL)
@@ -101,12 +100,10 @@ public class GameGrid {
             }
         }
     }
-
     public ArrayList<ArrayList<Block>> getBlocks(){
         return blocks;
     }
-
-    public ArrayList<Block> getNeighbours(Block block){
+    public ArrayList<Block> getNeighbours(Block block){  //
         ArrayList<Block> neighbours = new ArrayList<Block>();
         int j = block.getxPos();
         int i = block.getyPos();

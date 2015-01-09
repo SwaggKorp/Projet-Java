@@ -32,10 +32,8 @@ Deal with onPause/onResume.
 Readjust colours/sprites! and organize menu.
 Quit button implementation.
 Add new map button so as to really differentiate playing/creating.
-
-Finish changing joystick behaviour !!!
-
-REMOVE 'fils de pute' from game over screen BEFORE SENDING PROJECT!
+Remove Spinner(which doesn't work very well) and use something more awesome!
+Change shitty menu button image. Also, it stays apparent when gameOverLayout is Visible.
 
 Optimize pathfinders by having a common pathfinder to all enemies!!!!!
 Improve JoyStick usability by allowing players to 'glide' along obstacles i.e. add extra directions.
@@ -72,10 +70,10 @@ public class MainActivity extends Activity {
 
     public final static int gridColumnNumber = 20; // FIXED GRID SIZE. We chose 20x25.
     public final static int gridRowNumber = 25;
-    public final static String FIELD_COLOUR = "#ffffce57";
+    public final static String FIELD_COLOUR = "#ffffce57";   // App colours. Still shit, couldn't decide despite hours of testing
     public final static String WALL_COLOUR = "#ff393939";
-    public final static String BACKGROUND_COLOUR = "#ffffffff";
-    public final static int playDelay = 90;
+    public final static String BACKGROUND_COLOUR = "#ffeeeeee";
+    public final static int playDelay = 90;    // Various timer delays for moving objects/events
     public final static int enemyDelay = 200;
     public final static int spawnRate = 5000;
     public final static int scoreUpdateDelay = 100;
@@ -163,7 +161,7 @@ public class MainActivity extends Activity {
                 playerDirection = joystick.getDirection();
 
                 if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    if (joystick.getDirection() != playerDirection) { //If direction has changed
+                    if (joystick.getDirection() != playerDirection) { //If direction has changed. This avoids restarting the timer at every tick.
                         playerDirection = joystick.getDirection();
                         playerTimer.cancel();
                         playerTimer = new Timer();
@@ -293,7 +291,7 @@ public class MainActivity extends Activity {
 
         fileSpinner.setAdapter(adapter);
     } // Add existing file names to spinner.
-    private void getFieldEdges(){
+    private void getFieldEdges(){ // Used to calculate possible enemy spawn spots.
         fieldEdges.clear();
 
         for(int i = 0; i<gridRowNumber; i++){   // Adds left blocks that aren't walls.
@@ -404,6 +402,6 @@ public class MainActivity extends Activity {
 
         endScoreTextView.setText("Score : " + gameHandler.getScore());
         gameOverLayout.setVisibility(View.VISIBLE);
-    }
+    } // Handle gameover event.
 
 }

@@ -28,8 +28,8 @@ public class FileManager {
         }
     }
 
-    public void saveFile(String fileTitle){
-        String fileName = fileTitle + ".maze";
+    public void saveFile(String fileTitle){     // save a maze to internal storage. No permission needed.
+        String fileName = fileTitle + ".maze"; // ".maze" isn't necessary
         if(!fileNames.contains(fileName)) {
             byte[] data = gridData();
             try {
@@ -45,7 +45,6 @@ public class FileManager {
         }
         else Toast.makeText(mContext, "File name already used!", Toast.LENGTH_SHORT).show();
     }
-
     public boolean readFile(String fileTitle){         //return true if success.
         String fileName = fileTitle + ".maze";
         if(fileNames.contains(fileName)) {
@@ -74,7 +73,6 @@ public class FileManager {
         else Toast.makeText(mContext, "File doesn't exist!", Toast.LENGTH_SHORT).show();
         return false;
     }
-
     public boolean deleteFile(String fileTitle){          // return true if success.
         String fileName = fileTitle + ".maze";
         if(fileNames.contains(fileName)){
@@ -87,7 +85,7 @@ public class FileManager {
         return false;
     }
 
-    public byte[] gridData(){
+    public byte[] gridData(){ // Computes a byte[] to save given a grid.
 
         int numColumns = blocks.get(0).size();
         int numRows = blocks.size();
@@ -106,8 +104,7 @@ public class FileManager {
         }
         return data;
     }
-
-    private void getGridFromData(byte[] data){
+    private void getGridFromData(byte[] data){ // Does the opposite of gridData().
         int i = 0, j = 0;
         int len = data.length;
 
@@ -126,7 +123,7 @@ public class FileManager {
         }
     }
 
-    public ArrayList<String> getFileNames(){
+    public ArrayList<String> getFileNames(){   // Returns an ArrayList of existing files in internal storage.
         ArrayList<String> list = new ArrayList<String>();
         for(int i = 0; i<fileNames.size();i++){
             String temp = fileNames.get(i);

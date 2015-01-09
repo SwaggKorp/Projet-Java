@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 public class Block extends View {
 
     private Context mContext; // Needed to instantiate View...
-    private GameHandler gameHandler;
+    private GameHandler gameHandler; // It is here that gamehandler detects the type of collision.
     private Paint paint;
     private int backgroundColour = Color.parseColor(MainActivity.FIELD_COLOUR);
     private int wallColour = Color.parseColor(MainActivity.WALL_COLOUR);
@@ -47,7 +47,7 @@ public class Block extends View {
     }
 
     @Override
-    public void onDraw(Canvas canvas){
+    public void onDraw(Canvas canvas){    // Deals with drawing the view.
         if(blockState==STATE_FIELD)
             paint.setColor(backgroundColour);
         else
@@ -62,14 +62,14 @@ public class Block extends View {
     }
 
     /* CHARACTER RELATED FUNCTIONS*/
-    public void setCharacter(Character charact) {         // Doesn't check if there is already a character!!
+    public void setCharacter(Character charact) {
         if (!hasCharacter) {
             character = charact;
             hasCharacter = true;
             invalidate();
         }
         else if(charact.getStatus() == character.getStatus()){  // Two enemies collide.
-//            gameHandler.killEnemy((Enemy)charact,true);
+//            gameHandler.killEnemy((Enemy)charact,true);                // Add this line if you want two enemies in collision to kill each other
             gameHandler.killEnemy((Enemy)character,true);        }
         else{  // Enemy and player collide
             gameHandler.endGame();

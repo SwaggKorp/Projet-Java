@@ -4,24 +4,28 @@ import java.util.ArrayList;
 
 /**
  * Created by Henry on 09/12/2014.
+ * Calculates the shortest path from enemy to player. Not dijsktra but a modified dfs.
  */
 public class PathFinder {
     private GameGrid gameGrid;
-    private ArrayList<ArrayList<Block>> blocks;
     private ArrayList<ArrayList<Mark>> marks;
 
     public PathFinder(GameGrid gameGrid){
         this.gameGrid = gameGrid;
-        blocks = gameGrid.getBlocks();
         marks = new ArrayList<ArrayList<Mark>>();
     }
 
-    public ArrayList<Block> shortestPath(Block root, Block target){   // Implement also Dijkstra
+    public ArrayList<Block> shortestPath(Block root, Block target){   // Implement also Dijkstra later
         ArrayList<Block> waitingBlocks = new ArrayList<Block>();
         Block current;
         initializeMarks();
 
         marks.get(root.getyPos()).get(root.getxPos()).setMark(true);
+
+        /*
+        Snippet of Arnaud's optimization. This will be useful when you implement a common pathfinder for the enemies.
+        Don't erase it!!
+         */
 
 //        // optimisation :
 //        for(Block block : gameGrid.getNeighbours(root)) {
@@ -54,7 +58,7 @@ public class PathFinder {
         return new ArrayList<Block>();
     }
 
-    private ArrayList<Block> getPath(Block root, Block target) { // path[0] = target!! and path[max] = root's son.
+    private ArrayList<Block> getPath(Block root, Block target) { // path[0] = target!! and path[max] = root's son. This is used to retrace the enemies movements.
         ArrayList<Block> path = new ArrayList<Block>();
         Block current = target;
 
@@ -67,7 +71,6 @@ public class PathFinder {
 
         return path;
     }
-
     private class Mark{
         private boolean mark;
         private Block father;
@@ -89,8 +92,8 @@ public class PathFinder {
         public void setFather(Block father){
             this.father = father;
         }
-    }
-    private void initializeMarks(){
+    }  // Small inner class used to handle marks for the pathfinding algorithm.
+    private void initializeMarks(){     // Resets all the marks. Used in initialization of pathfinder algorithm.
         while(marks.size() != 0) // Empty marksList
             marks.remove(0);
 

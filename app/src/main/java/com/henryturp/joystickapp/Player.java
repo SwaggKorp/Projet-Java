@@ -8,8 +8,9 @@ import java.util.ArrayList;
 
 /**
  * Created by Henry on 03/12/2014.
+ * Abstract class from which will derive player and enemy.
  */
-public class Player extends Character {
+public class Player extends Character {  // Superclass is needed to be able to list together player and enemies.
     private Context mContext;
     private Bitmap skin;
 

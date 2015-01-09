@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 /**
  * Created by Henry on 08/12/2014.
+ *
+ * The enemy always goes to the end of the calculated path. This gives the player a tactical advantage as the enemy
+ * won't always be going straight for him.
+ *
  */
 public class Enemy extends Character{
     private Context mContext;
@@ -22,7 +26,7 @@ public class Enemy extends Character{
         super(source,true,gameGrid.getBlocks());
         mContext = context;
         this.target = target;
-        pathfinder = new PathFinder(gameGrid);
+        pathfinder = new PathFinder(gameGrid);    // Each enemy has it's own pathfinder. ---> Sort this out at the end!
         this.gameGrid = gameGrid;
 
         skin = BitmapFactory.decodeResource(mContext.getResources(), playerSkinId);
@@ -30,13 +34,10 @@ public class Enemy extends Character{
 
         path = new ArrayList<Direction>();
 
-        calculatePath();
+        calculatePath(); // Path to player is calculated.
     }
 
-
-
-
-    public void move(){
+    public void move(){              // This is called by the timer. After every move, the next direction is computed.
         move(currentDirection);
         currentDirection = getNextDirection();
 

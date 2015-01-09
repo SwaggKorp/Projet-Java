@@ -27,7 +27,7 @@ public class Joystick {
     private ViewGroup mLayout;
     private ViewGroup.LayoutParams params;
 
-    private boolean touchDown = false;
+    private boolean touchDown = false;  // Determines whether or not the finger is currently in use vis-à-vis joystick.
 
     public Joystick(Context Context,ViewGroup Layout, int joystickId){
         mContext = Context;
@@ -42,7 +42,7 @@ public class Joystick {
         stickHeight = stick.getHeight();
 
     }
-    public void drawStick(MotionEvent event){
+    public void drawStick(MotionEvent event){    // Draws the stick at the right position when user moves his finger.
         xPos = (int) (event.getX() - (params.width/2));
         yPos = (int) (event.getY() - (params.height/2));
         distance = (float) Math.sqrt((xPos*xPos) + (yPos*yPos));
@@ -80,6 +80,9 @@ public class Joystick {
 
     }
 
+    // Various setters so that I can reuse this in another game. Also allows me to
+    // play with the look of the joystick.
+
     public void setMinDistance(int minDist){
         minDistance = minDist;
     }
@@ -102,34 +105,7 @@ public class Joystick {
         params.height = height;
     }
 
-    public float getDistance(){
-        return distance;
-    }
-    public int getxPos(){
-        return xPos;
-    }
-    public int getyPos(){
-        return yPos;
-    }
-    public float getAngle(){
-        return angle;
-    }
-
-//    public Direction getDirection(){
-//        if(touchDown && distance >= minDistance){
-//            float quarterPi = (float) Math.PI/4;
-//            if(angle < quarterPi || angle > 7*quarterPi)
-//                return Direction.right;
-//            else if(angle < 3*quarterPi && angle > quarterPi)
-//                return Direction.down;
-//            else if(angle < 5*quarterPi && angle > 3*quarterPi)
-//                return Direction.left;
-//            else if(angle < 7*quarterPi && angle > 5*quarterPi)
-//                return Direction.up;
-//        }
-//        return Direction.none;
-//    }
-    public Direction getDirection(){
+    public Direction getDirection(){   // Returns a direction which is later used to move the player.
         if(touchDown && distance >= minDistance){
             float quarterPi = (float) Math.PI/4;
             if(angle < quarterPi)
@@ -168,12 +144,14 @@ public class Joystick {
         return 0;
 
     }
+
     private void draw(){
         try{
             mLayout.removeView(draw);
         } catch(Exception e){ }
             mLayout.addView(draw);
     }
+
     private class DrawCanvas extends View {
         float x, y;
 
@@ -190,5 +168,5 @@ public class Joystick {
             x = xpos - (stickWidth / 2);
             y = ypos - (stickHeight / 2);
         }
-    }
+    } // small inner class used to make drawing the stick in the appropriate location easier.
 }

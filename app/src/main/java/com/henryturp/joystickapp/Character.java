@@ -1,8 +1,6 @@
 package com.henryturp.joystickapp;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import java.util.ArrayList;
 
 /**
@@ -21,7 +19,7 @@ public abstract class Character {
         source.setCharacter(this);
     }
 
-    public abstract Bitmap getSkin();
+    public abstract Bitmap getSkin(); // will return character icon.
 
     public void move(Direction direction){    // Can't be arsed with ifs. This is hefty but it works.
         switch(direction){
@@ -53,19 +51,18 @@ public abstract class Character {
                 break;
         }
     }
-
     protected void moveUp(Direction direction){ // direction can only be upRight, upLeft or none.
         int xPos = characterBlock.getxPos();
         int yPos = characterBlock.getyPos();
 
-        if(yPos != 0) {
+        if(yPos != 0) {                // Not on the edge.
             Block newBlock = blocks.get(yPos-1).get(xPos);
             if(newBlock.getState() != Block.STATE_WALL) { // Target block isn't a wall.
                 newBlock.setCharacter(this);
                 characterBlock.removeCharacter();
                 characterBlock = newBlock;
             }
-            else { // If it is, glide left or right
+            else {                  // If it is, glide left or right
                 if(direction == Direction.upLeft)
                     moveLeft(Direction.none);
                 if(direction == Direction.upRight)
