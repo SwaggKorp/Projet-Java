@@ -19,6 +19,8 @@ public class GameGrid {
     private GridLayout mLayout;
     private ArrayList<ArrayList<Block>> blocks;
 
+    private boolean editState = false;  // Whether or not the grid is editable.
+
     private int columns, rows;
     private int mWidth, mHeight;
 
@@ -42,27 +44,27 @@ public class GameGrid {
         mLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                for(int i =0; i< mLayout.getChildCount(); i++)
-                {
-                    Block child = (Block) mLayout.getChildAt(i);
-                    Rect outRect = new Rect(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
-                    if(outRect.contains((int)event.getX(), (int)event.getY()))
-                    {
-                        if(event.getAction() == MotionEvent.ACTION_DOWN){
-                            touchDown = true;
-                            lastBlock = child;
-                            child.setState(1-child.getState());
-                            child.invalidate();
-                        }
-                        if(event.getAction() == MotionEvent.ACTION_MOVE){
-                            if(child != lastBlock) {
+                if(editState) {  // If grid is not in 'edit mode' this basically does nothing.
+                    for (int i = 0; i < mLayout.getChildCount(); i++) {
+                        Block child = (Block) mLayout.getChildAt(i);
+                        Rect outRect = new Rect(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
+                        if (outRect.contains((int) event.getX(), (int) event.getY())) {
+                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                touchDown = true;
                                 lastBlock = child;
                                 child.setState(1 - child.getState());
                                 child.invalidate();
                             }
-                        }
-                        if(event.getAction() == MotionEvent.ACTION_UP){
-                            touchDown = false;
+                            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                                if (child != lastBlock) {
+                                    lastBlock = child;
+                                    child.setState(1 - child.getState());
+                                    child.invalidate();
+                                }
+                            }
+                            if (event.getAction() == MotionEvent.ACTION_UP) {
+                                touchDown = false;
+                            }
                         }
                     }
                 }
@@ -127,4 +129,7 @@ public class GameGrid {
 
         return neighbours;
     }
+
+    public void setEditState(boolean state){editState = state;}
+    public boolean getEditState(){return editState;}
 }

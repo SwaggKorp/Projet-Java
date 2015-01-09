@@ -114,6 +114,60 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/deleteButton"
             />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/gameOverLayout"
+        android:background="@drawable/menu_ffffff"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/endScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:layout_centerHorizontal="true"/>
+
+        <ImageView
+            android:id="@+id/gameOver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/endScoreTextView"
+            android:background="@drawable/gameover"/>
+
+        <Button
+            android:id="@+id/tryAgainButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Try again ?"
+            android:background="@drawable/menu_ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/gameOver"
+            android:textColor="#ff000000"/>
+
+        <Button
+            android:id="@+id/editMapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit map"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/menu_ffffff"
+            android:layout_below="@id/tryAgainButton"
+            android:textColor="#ff000000"/>
+
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exit"
+            android:background="@drawable/menu_ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/editMapButton"
+            android:textColor="#ff000000"/>
+
 
 
     </RelativeLayout>

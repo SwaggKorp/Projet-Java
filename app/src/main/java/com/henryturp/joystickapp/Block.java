@@ -69,7 +69,7 @@ public class Block extends View {
             invalidate();
         }
         else if(charact.getStatus() == character.getStatus()){  // Two enemies collide.
-            gameHandler.killEnemy((Enemy)charact,true);
+//            gameHandler.killEnemy((Enemy)charact,true);
             gameHandler.killEnemy((Enemy)character,true);        }
         else{  // Enemy and player collide
             gameHandler.endGame();
@@ -83,6 +83,9 @@ public class Block extends View {
         invalidate();
     }
 
+    public boolean hasCharacter(){
+        return hasCharacter;
+    }
 
     public boolean equals(Block block) {
         return (block.getxPos()==xPos && block.getyPos()==yPos);
