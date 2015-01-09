@@ -33,6 +33,8 @@ Readjust colours/sprites! and organize menu.
 Quit button implementation.
 Add new map button so as to really differentiate playing/creating.
 
+Finish changing joystick behaviour !!!
+
 REMOVE 'fils de pute' from game over screen BEFORE SENDING PROJECT!
 
 Optimize pathfinders by having a common pathfinder to all enemies!!!!!

@@ -23,39 +23,63 @@ public abstract class Character {
 
     public abstract Bitmap getSkin();
 
-    public void move(Direction direction){    // Can't be arsed with ifs
+    public void move(Direction direction){    // Can't be arsed with ifs. This is hefty but it works.
         switch(direction){
-            case right:
-                moveRight();
+            case rightUp:
+                moveRight(Direction.rightUp);
                 break;
-            case down:
-                moveDown();
+            case rightDown:
+                moveRight(Direction.rightDown);
                 break;
-            case left:
-                moveLeft();
+            case leftUp:
+                moveLeft(Direction.leftUp);
                 break;
-            case up:
-                moveUp();
+            case leftDown:
+                moveLeft(Direction.leftDown);
+                break;
+            case upRight:
+                moveUp(Direction.upRight);
+                break;
+            case upLeft:
+                moveUp(Direction.upLeft);
+                break;
+            case downLeft:
+                moveDown(Direction.downLeft);
+                break;
+            case downRight:
+                moveDown(Direction.downRight);
                 break;
             default:
                 break;
         }
     }
 
-    protected void moveUp(){
+    protected void moveUp(Direction direction){ // direction can only be upRight, upLeft or none.
         int xPos = characterBlock.getxPos();
         int yPos = characterBlock.getyPos();
 
         if(yPos != 0) {
             Block newBlock = blocks.get(yPos-1).get(xPos);
-            if(newBlock.getState() != Block.STATE_WALL) {
+            if(newBlock.getState() != Block.STATE_WALL) { // Target block isn't a wall.
                 newBlock.setCharacter(this);
                 characterBlock.removeCharacter();
                 characterBlock = newBlock;
             }
+            else { // If it is, glide left or right
+                if(direction == Direction.upLeft)
+                    moveLeft(Direction.none);
+                if(direction == Direction.upRight)
+                    moveRight(Direction.none);
+            }
+        }
+        else { // If it is, glide left or right
+            if(direction == Direction.upLeft)
+                moveLeft(Direction.none);
+            if(direction == Direction.upRight)
+                moveRight(Direction.none);
         }
     }
-    protected void moveLeft(){
+    protected void moveLeft(Direction direction){
         int xPos = characterBlock.getxPos();
         int yPos = characterBlock.getyPos();
 
@@ -66,9 +90,21 @@ public abstract class Character {
                 characterBlock.removeCharacter();
                 characterBlock = newBlock;
             }
+            else { // If it is, glide up or down
+                if(direction == Direction.leftUp)
+                    moveUp(Direction.none);
+                if(direction == Direction.leftDown)
+                    moveDown(Direction.none);
+            }
+        }
+        else { // If it is, glide up or down
+            if(direction == Direction.leftUp)
+                moveUp(Direction.none);
+            if(direction == Direction.leftDown)
+                moveDown(Direction.none);
         }
     }
-    protected void moveRight(){
+    protected void moveRight(Direction direction){
         int xPos = characterBlock.getxPos();
         int yPos = characterBlock.getyPos();
 
@@ -79,9 +115,21 @@ public abstract class Character {
                 characterBlock.removeCharacter();
                 characterBlock = newBlock;
             }
+            else { // If it is, glide up or down
+                if(direction == Direction.rightUp)
+                    moveUp(Direction.none);
+                if(direction == Direction.rightDown)
+                    moveDown(Direction.none);
+            }
+        }
+        else { // If it is, glide up or down
+            if(direction == Direction.rightUp)
+                moveUp(Direction.none);
+            if(direction == Direction.rightDown)
+                moveDown(Direction.none);
         }
     }
-    protected void moveDown(){
+    protected void moveDown(Direction direction){
         int xPos = characterBlock.getxPos();
         int yPos = characterBlock.getyPos();
 
@@ -92,7 +140,19 @@ public abstract class Character {
                 characterBlock.removeCharacter();
                 characterBlock = newBlock;
             }
-    }
+            else { // If it is, glide left or right
+                if(direction == Direction.downLeft)
+                    moveLeft(Direction.none);
+                if(direction == Direction.downRight)
+                    moveRight(Direction.none);
+            }
+        }
+        else { // If it is, glide left or right
+            if(direction == Direction.downLeft)
+                moveLeft(Direction.none);
+            if(direction == Direction.downRight)
+                moveRight(Direction.none);
+        }
     }
 
     public Block getCharacterBlock(){

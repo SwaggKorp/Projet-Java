@@ -80,16 +80,16 @@ public class Enemy extends Character{
         int nowYPos = block.getyPos();
 
         if(xPos == nowXPos + 1 && yPos == nowYPos)
-            return Direction.right;
+            return Direction.rightUp;              // Any right will do
 
         if(xPos == nowXPos && yPos == nowYPos + 1)
-            return Direction.down;
+            return Direction.downRight;
 
         if(xPos == nowXPos - 1 && yPos == nowYPos)
-            return Direction.left;
+            return Direction.leftUp;
 
         if(xPos == nowXPos && yPos == nowYPos - 1)
-            return Direction.up;
+            return Direction.upRight;
 
         return Direction.none;
     }

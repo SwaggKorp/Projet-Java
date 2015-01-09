@@ -115,17 +115,39 @@ public class Joystick {
         return angle;
     }
 
+//    public Direction getDirection(){
+//        if(touchDown && distance >= minDistance){
+//            float quarterPi = (float) Math.PI/4;
+//            if(angle < quarterPi || angle > 7*quarterPi)
+//                return Direction.right;
+//            else if(angle < 3*quarterPi && angle > quarterPi)
+//                return Direction.down;
+//            else if(angle < 5*quarterPi && angle > 3*quarterPi)
+//                return Direction.left;
+//            else if(angle < 7*quarterPi && angle > 5*quarterPi)
+//                return Direction.up;
+//        }
+//        return Direction.none;
+//    }
     public Direction getDirection(){
         if(touchDown && distance >= minDistance){
             float quarterPi = (float) Math.PI/4;
-            if(angle < quarterPi || angle > 7*quarterPi)
-                return Direction.right;
-            else if(angle < 3*quarterPi && angle > quarterPi)
-                return Direction.down;
-            else if(angle < 5*quarterPi && angle > 3*quarterPi)
-                return Direction.left;
-            else if(angle < 7*quarterPi && angle > 5*quarterPi)
-                return Direction.up;
+            if(angle < quarterPi)
+                return Direction.rightDown;
+            else if(angle < 2*quarterPi && angle >= quarterPi)
+                return Direction.downRight;
+            else if(angle < 3*quarterPi && angle >= 2*quarterPi)
+                return Direction.downLeft;
+            else if(angle < 4*quarterPi && angle >= 3*quarterPi)
+                return Direction.leftDown;
+            else if(angle < 5*quarterPi && angle >= 4*quarterPi)
+                return Direction.leftUp;
+            else if(angle < 6*quarterPi && angle >= 5*quarterPi)
+                return Direction.upLeft;
+            else if(angle < 7*quarterPi && angle >= 6*quarterPi)
+                return Direction.upRight;
+            else if(angle < 8*quarterPi && angle >= 6*quarterPi)
+                return Direction.rightUp;
         }
         return Direction.none;
     }
