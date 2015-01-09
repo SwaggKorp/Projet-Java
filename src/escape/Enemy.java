@@ -13,16 +13,24 @@ public class Enemy extends Character {
     private static Timer spawner;
     private static Timer animator;
     private static ArrayList<Enemy> enemies;
+    private static float strength;                             //the number of enemy spawned per wave, slowly increases
+    private static final float strengthGrowth = 0.2f;          //the value added to strength after each wave
     
     private ArrayList<EscapeBlock> path;
     
     static {
-        spawner = new Timer(1000, new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+        spawner = new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                for(int i=0;i<strength;i++) {
                      enemies.add(Enemy.spawn());
                 }
+                strength += strengthGrowth;
+            } 
         });
-        animator = new Timer(200, new ActionListener() {
+        spawner.setInitialDelay(700);
+        animator = new Timer(150, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                  for(int i=0;i<enemies.size();i++) {
                      enemies.get(i).move();
@@ -32,8 +40,8 @@ public class Enemy extends Character {
         enemies = new ArrayList<>();
     }
     
-    public Enemy(EscapeBlock block, Escape window) {
-        super(block, window, new Color(164,12,12));
+    public Enemy(EscapeBlock block) {
+        super(block, new Color(164,12,12));
         
         this.enemy = true;
         path = new ArrayList<>();
@@ -48,6 +56,7 @@ public class Enemy extends Character {
             if(path.get(0).hasCharacter()) {
                 if(path.get(0).hasEnemy()) {
                     destroy();
+                    score.addEnemyDestroyedPoints();
                 } else {
                     window.displayGameOver();
                 }
@@ -80,7 +89,7 @@ public class Enemy extends Character {
             }
             if(targetBlock.alive() && !targetBlock.hasCharacter()) {
                     found = true;
-                    enemy = new Enemy(targetBlock, window);
+                    enemy = new Enemy(targetBlock);
             }
         }
         return enemy;
@@ -90,6 +99,7 @@ public class Enemy extends Character {
         while(!enemies.isEmpty()) {
             enemies.get(0).destroy();
         }
+        strength = 1;
         animate();
     }
     public static void freeze() {

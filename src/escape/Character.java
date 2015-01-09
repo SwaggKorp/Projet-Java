@@ -1,68 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package escape;
 
 import java.awt.Color;
-import java.awt.event.KeyEvent;
 
-/**
- *
- * @author arnaud
+/*
+ *  Abstract object that reprensents a character, a player or an enemy
  */
 public abstract class Character {
-    public static int margin = 3;
-    protected static Grid grid;
-    protected static Escape window;
+    public static final int margin = 3;                                         // size of the displayed circle
+    protected static Grid grid;                                                 // reference to the grid available to all character
+    protected static Escape window;                                             // reference to the window
+    protected static ScoreCounter score;                                        // and the score counter
     
-    protected Color color;
-    protected boolean enemy;
-    protected EscapeBlock block;
+    protected Color color;                                                      // color of the character
+    protected boolean enemy;                                                    // whether it's an enemy or not
+    protected EscapeBlock block;                                                // refernec to the block it's on
     
-    public Character(EscapeBlock source, Escape window, Color color) {
+    public Character(EscapeBlock source, Color color) {
         block = source;
         this.color = color;
-        //this.window = window;
         
         source.addCharacter(this);
     }
-    protected void move(int keyCode) {
-        int x = block.getPosition()[0];
-        int y = block.getPosition()[1];
-        switch(keyCode) {
-            case KeyEvent.VK_LEFT:
-                if(x>0 && grid.getBlock(x-1, y).alive())
-                    moveTo(grid.getBlock(x-1, y));
-                break;
-            case KeyEvent.VK_RIGHT:
-                if(x<grid.getGridWidth()-1 && grid.getBlock(x+1, y).alive())
-                    moveTo(grid.getBlock(x+1, y));
-                break;
-            case KeyEvent.VK_UP:
-                if(y>0 && grid.getBlock(x, y-1).alive())
-                    moveTo(grid.getBlock(x, y-1));
-                break;
-            case KeyEvent.VK_DOWN:
-                if(y<grid.getGridHeight()-1 && grid.getBlock(x, y+1).alive())
-                    moveTo(grid.getBlock(x, y+1));
-                break;
-        }
-    }
-    public Color getColor() {
-        return color;
-    }
-    public int getMargin() {
-        return margin;
-    }
-    public boolean isEnemy() {
-        return enemy;
-    }
+    // move the character to the specified block
     protected void moveTo(EscapeBlock block) {
         this.block.removeCharacter();
         this.block = block;
         block.addCharacter(this);
+    }
+    // Getters and setters
+    public Color getColor() {
+        return color;
+    }
+    public boolean isEnemy() {
+        return enemy;
     }
     public EscapeBlock getBlock() {
         return block;
@@ -72,5 +43,6 @@ public abstract class Character {
     }
     public static void setWindow(Escape window) {
         Character.window = window;
+        Character.score = window.getScoreCounter();
     }
 }

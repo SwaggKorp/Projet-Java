@@ -5,6 +5,9 @@ import com.apple.eawt.Application;
 import javax.swing.ImageIcon;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/*
+ * The main class that creates the window and handles user inputs (keyboard and menus)
+ */
 public class Escape extends javax.swing.JFrame {
     
     private FileManager fileManager;
@@ -16,12 +19,13 @@ public class Escape extends javax.swing.JFrame {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Escape");
         // set OS X dock icon
-        Application.getApplication().setDockIconImage(new ImageIcon("src/Escape/app.png").getImage());
+        Application.getApplication().setDockIconImage(
+                new ImageIcon(getClass().getResource("/app.png")).getImage());
         //initialize all components
         initComponents();
         // initialize open/save 
         fileManager = new FileManager(this, grid);
-        
+        // allow these components to access the window
         Character.setWindow(this);
         gameOverMenu.setWindow(this);
     }
@@ -33,14 +37,16 @@ public class Escape extends javax.swing.JFrame {
 
         grid = new escape.Grid();
         gameOverMenu = new escape.GameOverMenu();
-        jMenuBar3 = new javax.swing.JMenuBar();
-        jMenu5 = new javax.swing.JMenu();
+        scoreCounter = new escape.ScoreCounter();
+        menuBar = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
         newMenu = new javax.swing.JMenuItem();
         openMenu = new javax.swing.JMenuItem();
         saveMenu = new javax.swing.JMenuItem();
         saveasMenu = new javax.swing.JMenuItem();
         PlayerMenu = new javax.swing.JMenu();
-        spawn = new javax.swing.JMenuItem();
+        gameMode = new javax.swing.JMenuItem();
+        editMode = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -55,7 +61,12 @@ public class Escape extends javax.swing.JFrame {
         grid.add(gameOverMenu);
         gameOverMenu.setBounds(70, 20, 397, 300);
 
-        jMenu5.setText("File");
+        scoreCounter.setForeground(new java.awt.Color(255, 255, 255));
+        scoreCounter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        grid.add(scoreCounter);
+        scoreCounter.setBounds(0, 0, 70, 16);
+
+        fileMenu.setText("File");
 
         newMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.META_MASK));
         newMenu.setText("New");
@@ -64,7 +75,7 @@ public class Escape extends javax.swing.JFrame {
                 newMenuActionPerformed(evt);
             }
         });
-        jMenu5.add(newMenu);
+        fileMenu.add(newMenu);
 
         openMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.META_MASK));
         openMenu.setText("Open ...");
@@ -73,7 +84,7 @@ public class Escape extends javax.swing.JFrame {
                 openMenuActionPerformed(evt);
             }
         });
-        jMenu5.add(openMenu);
+        fileMenu.add(openMenu);
 
         saveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.META_MASK));
         saveMenu.setText("Save");
@@ -82,7 +93,7 @@ public class Escape extends javax.swing.JFrame {
                 saveMenuActionPerformed(evt);
             }
         });
-        jMenu5.add(saveMenu);
+        fileMenu.add(saveMenu);
 
         saveasMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.META_MASK));
         saveasMenu.setText("Save as ...");
@@ -91,34 +102,43 @@ public class Escape extends javax.swing.JFrame {
                 saveasMenuActionPerformed(evt);
             }
         });
-        jMenu5.add(saveasMenu);
+        fileMenu.add(saveasMenu);
 
-        jMenuBar3.add(jMenu5);
+        menuBar.add(fileMenu);
 
-        PlayerMenu.setText("Player");
+        PlayerMenu.setText("Mode");
 
-        spawn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.META_MASK));
-        spawn.setText("Spawn");
-        spawn.addActionListener(new java.awt.event.ActionListener() {
+        gameMode.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.META_MASK));
+        gameMode.setText("game");
+        gameMode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                spawnActionPerformed(evt);
+                gameModeActionPerformed(evt);
             }
         });
-        PlayerMenu.add(spawn);
+        PlayerMenu.add(gameMode);
 
-        jMenuBar3.add(PlayerMenu);
+        editMode.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.META_MASK));
+        editMode.setText("edit");
+        editMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editModeActionPerformed(evt);
+            }
+        });
+        PlayerMenu.add(editMode);
 
-        setJMenuBar(jMenuBar3);
+        menuBar.add(PlayerMenu);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(grid, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+            .addComponent(grid, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(grid, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+            .addComponent(grid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
         );
 
         pack();
@@ -145,17 +165,26 @@ public class Escape extends javax.swing.JFrame {
             player.stopMoving(Direction.fromKeyCode(evt.getKeyCode()));  
     }//GEN-LAST:event_formKeyReleased
 
-    private void spawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spawnActionPerformed
+    private void gameModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gameModeActionPerformed
         newGame();
-    }//GEN-LAST:event_spawnActionPerformed
+    }//GEN-LAST:event_gameModeActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         if(player!=null)
             player.startMoving(Direction.fromKeyCode(evt.getKeyCode()));
     }//GEN-LAST:event_formKeyPressed
-    /**
-     * @param args the command line arguments
-     */
+
+    private void editModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editModeActionPerformed
+        gameOverMenu.setVisible(false);
+        Enemy.reset();          // remove all enemies (and restart spawner)
+        Enemy.freeze();         // suspend spawner
+        grid.resetBlockColor(); // reset alive block colors
+        if(player!=null)        // if a player was created
+            player.destroy();
+        player = null;
+        grid.setEditable(true); 
+    }//GEN-LAST:event_editModeActionPerformed
+
     public static void main(String args[]) {
         // Set the System look and feel
         try { 
@@ -171,32 +200,40 @@ public class Escape extends javax.swing.JFrame {
             }
         });
     }
-    
+    // start a game
     public void newGame() {
-        gameOverMenu.setVisible(false);
-        grid.setEditable(false);
+        gameOverMenu.setVisible(false); 
+        grid.setEditable(false);                       // make sure the game grid can't be edited during the game
         
-        player = new Player(grid.getBlock(0, 0),this);
-        Enemy.reset();
+        player = new Player(grid.getBlock(0, 0));      
+        Enemy.reset();                                 // destroy all previous enemy and restart spawner
+        grid.resetBlockColor();                        // reset alive block colors
+        scoreCounter.startGame();                      // start counting score
     }
+    // when the player was hit, show game over 
     public void displayGameOver() {
-        Enemy.freeze();
-        gameOverMenu.resize();
+        Enemy.freeze();                                
         gameOverMenu.setVisible(true);
         
         player.destroy();
         player = null;
+        scoreCounter.stopGame();
+    }
+    public ScoreCounter getScoreCounter() {
+        return scoreCounter;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu PlayerMenu;
+    private javax.swing.JMenuItem editMode;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem gameMode;
     private escape.GameOverMenu gameOverMenu;
     private escape.Grid grid;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar3;
+    private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem newMenu;
     private javax.swing.JMenuItem openMenu;
     private javax.swing.JMenuItem saveMenu;
     private javax.swing.JMenuItem saveasMenu;
-    private javax.swing.JMenuItem spawn;
+    private escape.ScoreCounter scoreCounter;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,18 +1,17 @@
-/*
-Grid Class :
-handles the creation of blocks, resizes the grid and provides a structure for the blocks
-*/
+
 package escape;
 
 import java.util.ArrayList;
-
+/*
+ * Grid handles the creation of blocks, resizes the grid and provides a structure for the blocks
+ */
 public class Grid extends javax.swing.JPanel {
     public static final int margin = 10;                                        // margin between the border of the Panel to the blocks
-    
-    private ArrayList<ArrayList<EscapeBlock>> grid;                          
-    protected int gridWidth = 0;       
-    protected int gridHeight = 0;
-    private boolean editable = true;
+    public static final int topMargin = 8;                                      // additionnal margin on the top 
+    private ArrayList<ArrayList<EscapeBlock>> grid;                             // the list which contains blocks
+    private int gridWidth = 0;                                                  // current grid width (number of blocks)
+    private int gridHeight = 0;                                                 // current grid height (number of blocks)
+    private boolean editable = true;                                            // whether the block states (alive/dead) can be modified                                      
     
     public Grid() {
         super();                                                                // create a new JPanel
@@ -24,7 +23,7 @@ public class Grid extends javax.swing.JPanel {
         addComponentListener(new java.awt.event.ComponentAdapter() {            // detects when the window is resized to resize the grid
             @Override
             public void componentResized(java.awt.event.ComponentEvent evt) {
-                resize();
+                resizeGrid();
             }
         });
         
@@ -32,6 +31,7 @@ public class Grid extends javax.swing.JPanel {
         PathFinder.setGrid(this);
         EscapeBlock.setGrid(this);
         Character.setGrid(this);
+        
     }
     
     // #################   SIZE MANAGEMENT   ###################
@@ -41,10 +41,9 @@ public class Grid extends javax.swing.JPanel {
         grid.add(row);
         
         for (int j = 0; j < gridWidth; j++) {
-            
             EscapeBlock block = new EscapeBlock(j, gridHeight);
             block.setLocation(margin + j * (Block.length+1) ,
-                    margin + gridHeight * (Block.length+1));  
+                    margin + topMargin + gridHeight * (Block.length+1));  
                 
             this.add(block);                                                    // add to the JPanel   
             row.add(block);                                                     // and to the row
@@ -67,7 +66,7 @@ public class Grid extends javax.swing.JPanel {
         for (int j = 0; j < gridHeight; j++) {
             EscapeBlock block = new EscapeBlock(gridWidth,j);
             block.setLocation(margin + gridWidth * (Block.length+1) ,
-                    margin + j * (Block.length+1));       
+                    margin  + topMargin + j * (Block.length+1));       
             this.add(block);
             grid.get(j).add(block);
         }
@@ -84,13 +83,14 @@ public class Grid extends javax.swing.JPanel {
         }
         
     }
-    // resize the grid : adds and removes blocks
-    public void resize() {
-        resize(getWidth(),getHeight());
+    // resize the grid : adds and removes blocks to fit the current size of the grid
+    public void resizeGrid() {
+        resizeGrid(getWidth(),getHeight());
     }
-    public void resize(int width, int height) {
+    // resize the grid to the specified size, even if it doesn't fit to grid size, which  will be updated later
+    public void resizeGrid(int width, int height) {
         int newW = (width-2*margin)/(Block.length+1);
-        int newH = (height-2*margin)/(Block.length+1);
+        int newH = (height-2*margin-topMargin)/(Block.length+1);
 
         for(int i=gridWidth;i<newW;i++)
             addColumn();
@@ -103,6 +103,15 @@ public class Grid extends javax.swing.JPanel {
         repaint();
     }
     
+    // reset all alive block to the lighter color
+    public void resetBlockColor() {
+        for(int i=0;i<gridWidth; i++) {
+            for(int j=0;j<gridHeight;j++) {
+                getBlock(i,j).setDarker(false);
+            }
+        }
+        repaint();
+    }
     // #################   GETTERS & SETTERS   ###################
     public int getGridWidth() {  
         return gridWidth;

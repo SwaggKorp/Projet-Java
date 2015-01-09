@@ -1,28 +1,28 @@
-/*
-Block class:
-handles block display and user input in editting the grid 
 
- */
 package escape;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JComponent;
 
+/*
+ * Block class handles block display and user input in editting the grid 
+ */
 public abstract class Block extends JComponent {
     public final static int length = 23;                                        // the size of a block
-    public final static Color aliveColor = new Color(255,206,87);
-    public final static Color deadColor = new Color(57,57,57);
+    public final static Color aliveColor = new Color(255,206,87);               // color of the block when alive and never passed by 
+    public final static Color darkerAliveColor = new Color(253,189,69);         // color when the player has passed by the block during this game
+    public final static Color deadColor = new Color(57,57,57);                  // color when the block is dead (is a wall)
     
-    protected boolean alive = true;
-    protected Color characterColor;
-    protected boolean hasCharacter;
-    
+    protected boolean alive = true;                                             // whether the block can be passed by (alive) or not (dead)
+    protected Color characterColor;                                             // the color of the character that is on the block (if any)
+    protected boolean hasCharacter;                                             // whether a character is on the block
+    protected boolean isDarker;                                                 // whether is has been passed by during this game
     
     public Block() {
         super();
         
         this.setSize(length, length);
-        this.setFocusable(false);
+        this.setFocusable(false);                                     // make sure the component can't be selected (will absorb key events)
         
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -38,13 +38,15 @@ public abstract class Block extends JComponent {
         
         repaint();
     }
+    // function called by swing to display the block
     @Override
     public void paint(Graphics g) {
-        if(alive)
+        if(alive&&isDarker) 
+            g.setColor(darkerAliveColor);
+        else if(alive)
             g.setColor(aliveColor);
         else 
             g.setColor(deadColor);
-       
         g.fillRect(0, 0, length, length);
         
         if(hasCharacter) {
@@ -53,6 +55,7 @@ public abstract class Block extends JComponent {
         }
        
     }
+    // set whether the block is alive (can be passed by) or dead (is a wall)
     public void setAlive(boolean alive) {
         this.alive = alive;
         repaint();
@@ -60,10 +63,12 @@ public abstract class Block extends JComponent {
     public boolean alive() {
         return alive;
     }
+    // whenever the block is clicked on
     protected void onClick() {
         alive = !alive;
         repaint();
     }
+    // a character (player or enemy is on the block
     protected void addCharacter(Character character) {
         characterColor = character.getColor();
         hasCharacter = true;

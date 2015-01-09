@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package escape;
 
 import java.awt.event.KeyEvent;
 
-/**
- *
- * @author arnaud
+/*
+ *  Direction describe all possible direction for a character on the grid
  */
 public enum Direction {
     left,
@@ -17,6 +12,7 @@ public enum Direction {
     up,
     down,
     none;
+    // convert key code to Direction
     public static Direction fromKeyCode(int keyCode) {
         switch(keyCode) {
             case KeyEvent.VK_LEFT:

@@ -1,27 +1,28 @@
-/*
-EscapeBlock class:
-handles pathfinding variables and connections for each block
 
- */
 package escape;
 
 import java.util.ArrayList;
 
+/*
+ * EscapeBlock class handles pathfinding variables and connections for each block
+ */
 public class EscapeBlock extends Block{
-    private static Grid grid;
+    private static Grid grid;                                 // reference to the grid shared by all the EscapeBlocks
     
-    private boolean marked;
+    private boolean marked;                                   // shorter path
     private EscapeBlock father;
-    private ArrayList<EscapeBlock> neighbours; 
-    private int x;
-    private int y;
-    private Character character;
+    private ArrayList<EscapeBlock> neighbours;                // links to the neighbours blocks (linked for shorter path)
     
+    private int x;                                            // position in the grid
+    private int y;
+    private Character character;                              // reference to the character on the block
+    
+    // constructor where x and y are the position of the block on the grid
     public EscapeBlock(int x, int y) {
         super();
         this.x = x;
         this.y = y;
-        neighbours = new ArrayList<>();
+        neighbours = new ArrayList<>();               
         
         if(x>0) {
             grid.getBlock(x-1, y).connect(this);
@@ -83,10 +84,12 @@ public class EscapeBlock extends Block{
     public boolean equals(EscapeBlock block) {
         return (block.getPosition()[0]==x && block.getPosition()[1]==y);
     }
+    // remove all neighbours references ( when the block is destroyed )
     public void disconnectAll() {
         for(EscapeBlock block : neighbours)
             block.disconnect(this);
     }
+    // make sure all the alive neighbours are connected
     public void reconnectAll() {
         for(int i=0; i<neighbours.size(); i++)
             neighbours.get(i).reconnect();
@@ -135,5 +138,11 @@ public class EscapeBlock extends Block{
     }
     public static void setGrid(Grid grid) {
         EscapeBlock.grid = grid;
+    }
+    public boolean isDarker() {
+        return isDarker;
+    }
+    public void setDarker(boolean darker) {
+        isDarker = darker;
     }
 }

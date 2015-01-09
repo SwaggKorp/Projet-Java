@@ -10,8 +10,8 @@ public class Player extends Character {
     private Timer movementManager;
     private Direction currentDirection;
     
-    public Player(EscapeBlock block, Escape window) {
-        super(block, window, new Color(44,128,143));
+    public Player(EscapeBlock block) {
+        super(block, new Color(44,128,143));
         this.enemy = false;
         
         movementManager = new Timer(90, new ActionListener() {
@@ -36,26 +36,35 @@ public class Player extends Character {
     public void move(Direction direction) {
         int x = block.getPosition()[0];
         int y = block.getPosition()[1];
+        EscapeBlock newBlock = null;
+        
         switch(direction) {
             case left:
                 if(x>0 && grid.getBlock(x-1, y).alive())
-                    moveTo(grid.getBlock(x-1, y));
+                    newBlock = grid.getBlock(x-1, y);
                 break;
             case right:
                 if(x<grid.getGridWidth()-1 && grid.getBlock(x+1, y).alive())
-                    moveTo(grid.getBlock(x+1, y));
+                    newBlock = grid.getBlock(x+1, y);
                 break;
             case up:
                 if(y>0 && grid.getBlock(x, y-1).alive())
-                    moveTo(grid.getBlock(x, y-1));
+                    newBlock = grid.getBlock(x, y-1);
                 break;
             case down:
                 if(y<grid.getGridHeight()-1 && grid.getBlock(x, y+1).alive())
-                    moveTo(grid.getBlock(x, y+1));
+                    newBlock = grid.getBlock(x, y+1);
                 break;
         }
-        if(block.hasCharacter() && block.hasEnemy())
-            window.displayGameOver();
+        if(newBlock != null) {                                 // if the player can move toward the specified direction
+            moveTo(newBlock);
+            if(!newBlock.isDarker()) {                         // if the player has never been here
+                score.addBlockPoints();
+                newBlock.setDarker(true);
+            }
+            if(newBlock.hasCharacter() && newBlock.hasEnemy()) // if the block contains an enemy
+                window.displayGameOver(); 
+        }
     }
     public void destroy() {
         block.removeCharacter();
