@@ -1,0 +1,45 @@
+Notes pour Escape/projet java: 
+
+VERSION pour ordinateur :
+
+* compatibilité :
+l'application n'utilise aucune bibliothèque spécifique à un système d'exploitation,
+toutefois elle est configurée pour mac (barre de menu en haut sur mac, raccourcis 
+utilisants la touche cmd et icone) et n'a été testé que sur cette plateforme.
+
+Configuration requise :
+Mac OS X 10.10 Yosemite
+Java 7
+(toute autre configuration pourra produire des résultat imprévus)
+
+* Utilisation :
+l'application étend le principe d'un labyrinthe en un petit jeux.
+
+Au démarrage il y a une grille vide en mode édition.
+Pour charger/enregistrer des fichiers voir le menu File. Des niveaux sont fournis
+dans levels/
+pour démarrer le jeu faire Mode > game on cmd+G
+pour revenir au mode édition cmd+E ou Mode > edit
+
+>> test des fonctions de plus court chemin :
+pour vérifier le bon fonctionnement de l'algo de plus court chemin, on peut charger
+pathFinderDemo.ecp du dossier levels/. Lancer le jeu et observer le comportement 
+de l'ennemi (point rouge) qui parcours le plus court chemin. On pourra modifier
+le labyrinthe en repassant en mode edit.
+
+>> test du jeu:
+on dirige avec les flèches du clavier.
+l'objectif est de faire le meilleur score en:
+survivant le plus longtemps possible sans toucher d'ennemi
+passant par le plus de cases differentes possible (qui deviennent alors plus sombre)
+faisant en sorte de faire se rentrer dedans deux ennemis : l'un des deux est détruit
+
+Note: Il existe un "bug" connu qui fait qu'il arrive qu'on puisse passer à travers un
+ennemi sans game over. Il n'a pas été corrigé car il ne nuit pas au gameplay et
+laisse un dernier espoir au joueur. 
+
+pour le fonctionnement de l'IA des ennemis : voir code.
+
+>> édition de la grille:
+il suffit d'être en mode edit et de cliquer sur la grille. On peut aussi maintenir
+le clic et glisser pour faire des lignes.
