@@ -1,0 +1,12 @@
+Petit explication sur l'application Android Escape.
+
+Tout d'abord je ne l'ai testé que sur mon portable (OnePlus One). J'espère que vous n'aurez pas de soucis particuliers à le tester vous mêmes.
+Tous les fichiers du projet (réalisé avec Android Studio) sont présents dans le .zip.
+
+Certaines fonctionnalités restent incomplètes (et le design pourrait être beaucoup meilleur!) mais la version actuelle est fonctionelle et permet de jouer au même jeu qu'a créer Arnaud avec swing.
+
+Lorsque vous lancerez l'application, il y aura sans doute un petit toast pour vous dire qu'un fichier n'existe pas. Ceci provient du fait que j'avais un labyrinthe enregistré en stockage interne sur mon portable que je chargeais comme labyrinthe par défaut. Il vous faudra donc créer un premier labyrinthe et l'enregistrer en tapant un nom dans la zone de texte et en appuyant sur save. (Le nom du labyrinthe par défaut était "lol" il me semble... J'aurais peut-être du changer cela.). De plus, il faut laisser des bords disponibles dans votre labyrinthe! Sinon les ennemies ne pourrons entrer en jeu. Pour lancer la partie il suffit d'appuyer sur Start.
+
+Les ennemies spawnerons alors par vagues sur les bords disponibles et tenteront de vous tuer.
+Certains boutons du popup GameOver ne sont pas fonctionnels!
+
